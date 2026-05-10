@@ -1,0 +1,27 @@
+enum NotificationChannel {
+  whatsapp
+  sms
+  email
+  push
+}
+
+enum NotificationStatus {
+  sent
+  failed
+  pending
+}
+
+model NotificationsLog {
+  id        BigInt             @id @default(autoincrement())
+  user_id   BigInt
+  channel   NotificationChannel
+  type      String             @db.VarChar(80)
+  payload   Json?
+  status    NotificationStatus @default(pending)
+  sent_at   DateTime?
+  created_at DateTime?         @default(now())
+
+  @@index([user_id])
+  @@index([channel])
+  @@index([status])
+}

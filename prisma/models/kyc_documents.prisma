@@ -1,0 +1,31 @@
+enum KYCDocumentType {
+  aadhar
+  driving_license
+  passport
+}
+
+enum KYCReviewStatus {
+  pending
+  approved
+  rejected
+}
+
+model KycDocument {
+  id            BigInt            @id @default(autoincrement())
+  user_id       BigInt
+  user          User              @relation(fields: [user_id], references: [id])
+  type          KYCDocumentType
+  front_url     String            @db.VarChar(500)
+  back_url      String?           @db.VarChar(500)
+  doc_number    String?           @db.VarChar(50)
+  status        KYCReviewStatus   @default(pending)
+  reviewed_by   BigInt?
+  reviewed_at   DateTime?
+  rejection_reason String?        @db.Text
+  created_at    DateTime          @default(now())
+  updated_at    DateTime          @updatedAt
+  
+  @@index([user_id])
+  @@index([type])
+  @@index([status])
+}

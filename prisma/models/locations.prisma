@@ -1,0 +1,14 @@
+model Location {
+  id         BigInt    @id @default(autoincrement())
+  city_id    BigInt
+  name       String    @db.VarChar(150)
+  address    String?   @db.Text
+  lat        Decimal?  @db.Decimal(10, 7)
+  lng        Decimal?  @db.Decimal(10, 7)
+  is_active  Boolean   @default(true)
+  created_at DateTime?
+  updated_at DateTime?
+
+  @@index([city_id])
+  @@index([is_active])
+}

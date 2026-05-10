@@ -1,0 +1,25 @@
+enum VendorStatus {
+  pending
+  approved
+  rejected
+  suspended
+}
+
+model Vendor {
+  id              BigInt    @id @default(autoincrement())
+  user_id         BigInt    @unique
+  business_name   String    @db.VarChar(150)
+  gst_number      String?   @db.VarChar(20)
+  pan_number      String?   @db.VarChar(15)
+  status          VendorStatus @default(pending)
+  approved_by     BigInt?
+  approved_at     DateTime?
+  commission_rate Decimal   @db.Decimal(5, 2) @default(20.00)
+  bank_account    Json?
+  created_at      DateTime?  @default(now())
+  updated_at      DateTime?  @updatedAt
+  deleted_at      DateTime?
+
+  @@index([status])
+  @@index([deleted_at])
+}

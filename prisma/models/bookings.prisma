@@ -1,0 +1,38 @@
+enum BookingStatus {
+  pending
+  confirmed
+  active
+  completed
+  cancelled
+}
+
+model Booking {
+  id                 BigInt    @id @default(autoincrement())
+  booking_number     String    @unique @db.VarChar(20)
+  user_id            BigInt
+  car_id             BigInt
+  pickup_location_id BigInt
+  drop_location_id   BigInt
+  start_date         DateTime
+  end_date           DateTime
+  total_days         Int
+  base_amount        Decimal   @db.Decimal(10, 2)
+  discount_amount    Decimal   @db.Decimal(10, 2) @default(0.00)
+  surge_amount       Decimal   @db.Decimal(10, 2) @default(0.00)
+  tax_amount         Decimal   @db.Decimal(10, 2)
+  total_amount       Decimal   @db.Decimal(10, 2)
+  security_deposit   Decimal   @db.Decimal(10, 2) @default(0.00)
+  coupon_id          BigInt?
+  status             BookingStatus @default(pending)
+  cancellation_reason String?   @db.Text
+  cancelled_at       DateTime?
+  notes              String?   @db.Text
+  created_at         DateTime? @default(now())
+  updated_at         DateTime? @updatedAt
+
+  @@index([user_id])
+  @@index([car_id])
+  @@index([pickup_location_id])
+  @@index([drop_location_id])
+  @@index([status])
+}

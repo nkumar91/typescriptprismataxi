@@ -1,0 +1,11 @@
+model CouponUsage {
+  id               BigInt   @id @default(autoincrement())
+  coupon_id        BigInt
+  user_id          BigInt
+  booking_id       BigInt
+  discount_applied Decimal  @db.Decimal(10, 2)
+  created_at       DateTime? @default(now())
+
+  @@index([coupon_id])
+  @@index([user_id])
+}

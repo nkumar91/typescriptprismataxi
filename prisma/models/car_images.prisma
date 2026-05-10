@@ -1,0 +1,12 @@
+model CarImage {
+  id            BigInt    @id @default(autoincrement())
+  car_id        BigInt
+  url           String    @db.VarChar(500)
+  thumbnail_url String?   @db.VarChar(500)
+  is_primary    Boolean   @default(false)
+  sort_order    Int       @default(0)
+  created_at    DateTime? @default(now())
+
+  @@index([car_id])
+  @@index([is_primary])
+}
