@@ -24,6 +24,7 @@ export const verifyJwt = <T = any>(token: string): T | null => {
         const decoded = jwt.verify(token, getJwtSecret()) as T;
         return decoded;
     } catch (err) {
+        console.error('JWT verification failed:', err);
         return null;
     }
 };

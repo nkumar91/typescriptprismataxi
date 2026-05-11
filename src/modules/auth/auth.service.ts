@@ -6,6 +6,7 @@ import { env } from "../../config/env.js";
 import { randomUUID } from "crypto";
 import { AppError } from "../../utils/error.js";
 import { signJwt } from "../../utils/jwt.js";
+import redisClient from "../../config/redis.js";
 
 const JWT_SECRET = env.JWT_SECRET || "your-secret-key";
 const SALT_ROUNDS = 10;
@@ -69,6 +70,12 @@ export const loginUser = async (data: LoginInput) => {
 };
 
 
+// export const logoutUser = async (token: string) => {
+//   // Invalidate the token by adding it to a blacklist in Redis
+//   await redisClient.set(`blacklist:${token}`, "true", "EX", 60 * 60); // Set expiration to 1 hour
+
+//   return true;
+// };
 
 
 

@@ -60,8 +60,9 @@ export type UserResponse = {
   updated_at: Date;
 };
 
-export type ApiResponse<T = unknown> = {
-  status: string;
-  message: string;
-  data?: T;
-};
+// export type ApiResponse<T = unknown> = {
+//   status: string;
+//   message: string;
+//   token?: string;
+//   data?: T;
+// };
