@@ -9,9 +9,11 @@ export const limiter = rateLimit({
 });
 
 // Stricter rate limiter for login/signup
-export const authLimiter = rateLimit({
-    windowMs: 60 * 1000, // 1 minute
-    max: 10, // limit each IP to 10 requests per windowMs
+
+export const createLimiter = (windowsMs: number, max: number) => {
+   const authLimiter = rateLimit({
+    windowMs: windowsMs*60 * 1000, // 1 minute
+    max: max, // limit each IP to 10 requests per windowMs
     skipSuccessfulRequests: false,
     handler: (req:Request, res:Response) => {
         return res.status(429).json({
@@ -23,3 +25,6 @@ export const authLimiter = rateLimit({
 
     },
 });
+
+return authLimiter;
+}

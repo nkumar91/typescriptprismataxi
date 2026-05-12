@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyJwt, TokenPayload } from '../utils/jwt.js';
 import redisClient from '../config/redis.js';
+import { AppError } from '../utils/error.js';
 
 export interface RequestWithUser extends Request {
     user?: TokenPayload;
@@ -26,6 +27,6 @@ export const requireAuth = async (req: RequestWithUser, res: Response, next: Nex
         next();
     } catch (err) {
         console.error('Auth middleware error', err);
-        return res.status(500).json({ status: 'failed', message: 'Internal server error' });
+        throw new AppError('Authentication failed', 401);
     }
 };

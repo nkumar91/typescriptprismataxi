@@ -28,7 +28,6 @@ export const registerUser = async (data: CreateUserInput) => {
   if (data.password) {
     data.password = await bcrypt.hash(data.password, SALT_ROUNDS);
   }
-
   const uuid = randomUUID();
   if(!uuid) {
     throw new AppError("Failed to generate UUID", 500);
@@ -50,22 +49,23 @@ export const loginUser = async (data: LoginInput) => {
   const user = await prisma.user.findUnique({
     where: { email: data.email },
   });
-
   if (!user || !user.password) {
-    throw new AppError("Invalid email or password", 401);
+    throw new AppError("Invalid email", 401);
   }
-
+  if(user.status !== "active") {
+    throw new AppError("User account is not active verification required", 403);
+  }
   const isValidPassword = await bcrypt.compare(data.password, user.password);
   if (!isValidPassword) {
-    throw new AppError("Invalid email or password", 401);
+    throw new AppError("Invalid password", 401);
   }
 
+ 
   // Generate JWT token
   const token = signJwt({
     uuid: user.uuid,
     email: user.email,
   });
-
   return { user, token };
 };
 
@@ -73,31 +73,23 @@ export const loginUser = async (data: LoginInput) => {
 // export const logoutUser = async (token: string) => {
 //   // Invalidate the token by adding it to a blacklist in Redis
 //   await redisClient.set(`blacklist:${token}`, "true", "EX", 60 * 60); // Set expiration to 1 hour
-
 //   return true;
 // };
 
-
-
 export const verifyEmail = async (token: string) => {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload & {
-      userId?: string;
-      email?: string;
-    };
-
-    if (!decoded.email || !decoded.userId) {
+    const decoded: any = jwt.verify(token, JWT_SECRET);
+    if (!decoded.email || !decoded.uuid) {
       throw new AppError("Invalid verification token", 400);
     }
-
     return prisma.user.update({
-      where: { id: BigInt(decoded.userId) },
+      where: { uuid: decoded.uuid},
       data: {
         email_verified_at: new Date(),
         status: "active",
       },
     });
-  } catch (_error) {
+  } catch (error) {
     throw new AppError("Invalid verification token", 400);
   }
 };
@@ -115,10 +107,10 @@ export const verifyMobile = async (mobile: string, _otp: string) => {
   });
 };
 
-export const generateEmailVerificationToken = (userId: bigint, email: string) => {
+export const generateEmailVerificationToken = (uuid: string, email: string) => {
   return jwt.sign(
     {
-      userId: userId.toString(),
+      uuid: uuid,
       email,
       type: "email_verification",
     },
@@ -127,14 +119,47 @@ export const generateEmailVerificationToken = (userId: bigint, email: string) =>
   );
 };
 
-export const generatePasswordResetToken = (userId: bigint, email: string) => {
+export const generatePasswordResetToken = (uuid: string, email: string) => {
   return jwt.sign(
     {
-      userId: userId.toString(),
+      uuid: uuid,
       email,
       type: "password_reset",
     },
     JWT_SECRET,
     { expiresIn: "1h" }
   );
+};
+
+
+export const sendVerificationEmail = async (email: string, token: string) => {
+  // Implement your email sending logic here using nodemailer or any email service
+  // For example:
+  // const transporter = nodemailer.createTransport({
+  //   host: env.EMAIL_HOST,
+  //   port: env.EMAIL_PORT,
+  //   auth: {
+  //     user: env.EMAIL_USER,
+  //     pass: env.EMAIL_PASS,
+  //   },
+  // });
+  // const verificationLink = `${env.FRONTEND_URL}/verify-email?token=${token}`;
+  // await transporter.sendMail({
+  //   from: env.EMAIL_FROM,
+  //   to: email,
+  //   subject: "Email Verification",
+  //   text: `Please verify your email by clicking the following link: ${verificationLink}`,
+  // });
+};
+
+
+export const resetPassword = async (uuid: string, newPassword: string) => {
+  const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+  if(!hashedPassword) {
+    throw new AppError("Failed to hash password", 500);
+  }
+  return prisma.user.update({ 
+    where: { uuid },
+    data: { password: hashedPassword },
+  });
 };
