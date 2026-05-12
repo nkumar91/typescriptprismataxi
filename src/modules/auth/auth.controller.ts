@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { CreateUserInput, LoginInput, UserResponse } from "./auth.type.js";
-import { ApiResponse } from "../../utils/utils.js";
+import { ApiResponse } from "../../utils/types.js";
 import { 
   registerUser,
   loginUser,
@@ -192,7 +192,6 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
 
     // blacklist the token in Redis
     await redisClient.setEx(`bl:${token}`, ttl, '1');
-
     return res.status(200).json({ status: 'success', message: 'Logout successful' });
   } catch (err) {
     console.error('Logout Error', err);

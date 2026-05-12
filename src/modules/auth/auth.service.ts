@@ -5,7 +5,7 @@ import { prisma } from "../../config/db.js";
 import { env } from "../../config/env.js";
 import { randomUUID } from "crypto";
 import { AppError } from "../../utils/error.js";
-import { signJwt } from "../../utils/jwt.js";
+import { generateToken, signJwt } from "../../utils/jwt.js";
 import redisClient from "../../config/redis.js";
 
 const JWT_SECRET = env.JWT_SECRET || "your-secret-key";
@@ -108,14 +108,13 @@ export const verifyMobile = async (mobile: string, _otp: string) => {
 };
 
 export const generateEmailVerificationToken = (uuid: string, email: string) => {
-  return jwt.sign(
+  return generateToken(
     {
       uuid: uuid,
       email,
       type: "email_verification",
     },
-    JWT_SECRET,
-    { expiresIn: "24h" }
+    "24h"
   );
 };
 

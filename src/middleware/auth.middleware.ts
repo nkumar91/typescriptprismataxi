@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
-import { verifyJwt, TokenPayload } from '../utils/jwt.js';
+import { verifyJwt } from '../utils/jwt.js';
 import redisClient from '../config/redis.js';
 import { AppError } from '../utils/error.js';
+import { TokenPayload } from '../utils/types.js';
 
 export interface RequestWithUser extends Request {
     user?: TokenPayload;
 }
-
 export const requireAuth = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {

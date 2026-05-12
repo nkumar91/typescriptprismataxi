@@ -1,19 +1,27 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { env } from '../config/env.js';
+import { TokenPayload } from './types.js';
+
 
 
 const JWT_EXPIRE = env.JWT_EXPIRE || '7d';
 const getJwtSecret = ():string => env.JWT_SECRET || 't6d_6Gf^2**145@62$$&1kH@';
 
-export interface TokenPayload {
-    uuid: string;
-    email: string;
-}
+
 
 export const signJwt = (payload: TokenPayload, expiresIn?: string | number) => {
     try {
         const secret = getJwtSecret();
-        return jwt.sign(payload, secret, { expiresIn: expiresIn || JWT_EXPIRE });
+        return jwt.sign(payload, secret, { expiresIn: expiresIn || JWT_EXPIRE } as SignOptions);
+    } catch (err) {
+        return null;
+    }
+};
+
+export const generateToken = (payload: TokenPayload, expiresIn?: string | number) => {
+    try {
+        const secret = getJwtSecret();
+        return jwt.sign(payload, secret, { expiresIn: expiresIn || JWT_EXPIRE } as SignOptions);
     } catch (err) {
         return null;
     }
