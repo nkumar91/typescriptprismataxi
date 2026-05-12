@@ -52,9 +52,9 @@ export const loginUser = async (data: LoginInput) => {
   if (!user || !user.password) {
     throw new AppError("Invalid email", 401);
   }
-  if(user.status !== "active") {
-    throw new AppError("User account is not active verification required", 403);
-  }
+  // if(user.status !== "active") {
+  //   throw new AppError("User account is not active verification required", 403);
+  // }
   const isValidPassword = await bcrypt.compare(data.password, user.password);
   if (!isValidPassword) {
     throw new AppError("Invalid password", 401);
@@ -63,8 +63,10 @@ export const loginUser = async (data: LoginInput) => {
  
   // Generate JWT token
   const token = signJwt({
+    userId: user.id,
     uuid: user.uuid,
     email: user.email,
+    type: "login_access",
   });
   return { user, token };
 };
