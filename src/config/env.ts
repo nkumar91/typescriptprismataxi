@@ -14,6 +14,9 @@ const envSchema = z.object({
   DB_NAME: z.string().default("myprisma"),
   ALLOWED_ORIGINS: z.string().default("http://localhost:3000"),
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+  CLOUDINARY_CLOUD_NAME: z.string(),
+  CLOUDINARY_API_KEY: z.string(),
+  CLOUDINARY_API_SECRET: z.string(),
 });
 
 export const env = envSchema.parse(process.env);

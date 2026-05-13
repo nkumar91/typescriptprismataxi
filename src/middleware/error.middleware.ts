@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
+import { AppError } from "../utils/error.js";
 export const errorHandler = (
-    error: any,
+    error: AppError,
     req: Request,
     res: Response,
     next: NextFunction

@@ -15,14 +15,22 @@ export type GetProfileResponse = {
   updated_at?: Date;
 };
 
+export type KYCDocumentType = "aadhar" | "driving_license" | "passport";
+
 
 export type KyCSubmission = {
-  user_id: number;
-  type: string;
-  front_url: string;
-  back_url?: string;
-  doc_number?: string;
+  user_id?: bigint;
+  type: KYCDocumentType;
+  front_image: string;
+  back_image?: string;
+  doc_number: string;
 };
+
+
+
+
+
+
 
 
 

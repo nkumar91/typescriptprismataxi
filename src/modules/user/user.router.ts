@@ -16,8 +16,8 @@ userRouter.post(
   "/kyc", 
   createLimiter(1,60),
   cloud.fields([
-    { name: 'front_url', maxCount: 1 },
-    { name: 'back_url', maxCount: 1 }
+    { name: 'front_image', maxCount: 1 },
+    { name: 'back_image', maxCount: 1 }
   ]),
   userController.submitKYC
 );

@@ -10,18 +10,27 @@ export interface RequestWithUser extends Request {
 export const requireAuth = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ status: 'failed', message: 'Unauthorized' });
+        return res.status(401).json({ 
+            status: 'failed', 
+            message: 'Unauthorized access' 
+        });
     }
-    const token:any = authHeader.split(' ')[1];
+    const token:string = authHeader.split(' ')[1] || '';
     try {
         // Check if token is blacklisted
         const blacklisted = await redisClient.get(`bl:${token}`);
         if (blacklisted) {
-            return res.status(401).json({ status: 'failed', message: 'Token revoked' });
+            return res.status(401).json({
+                 status: 'failed', 
+                 message: 'Your token has been revoked' 
+            });
         }
         const decoded = verifyJwt<TokenPayload>(token);
         if (!decoded) {
-            return res.status(401).json({ status: 'failed', message: 'Invalid or expired token' });
+            return res.status(401).json({ 
+                status: 'failed', 
+                message: 'Invalid or expired token' 
+            });
         }
         req.user = decoded;
         next();

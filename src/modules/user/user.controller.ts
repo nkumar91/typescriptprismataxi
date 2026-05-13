@@ -1,9 +1,11 @@
 import { Response, NextFunction } from "express";
 import { RequestWithUser } from "../../middleware/auth.middleware.js";
-import { getProfile } from "./user.service.js";
+import { getProfile, submitKYCData } from "./user.service.js";
 import { GetProfileResponse, KyCSubmission } from "./user.types.js";
 import { ApiResponse } from "../../utils/types.js";
 import { validationResult } from "express-validator";
+import { AppError } from "../../utils/error.js";
+import { uploadToCloudinary } from "../../utils/utils.js";
 
 
 export const getUserProfile = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
@@ -14,7 +16,7 @@ export const getUserProfile = async (req: RequestWithUser, res: Response, next: 
             res.status(404).json({ message: "User not found" });
             return;
         }
-      //  const {id, password, remember_token, deleted_at, ...userResponse } = userProfile;
+        //  const {id, password, remember_token, deleted_at, ...userResponse } = userProfile;
         const responseData: ApiResponse<GetProfileResponse> = {
             status: "success",
             message: "User profile",
@@ -27,22 +29,57 @@ export const getUserProfile = async (req: RequestWithUser, res: Response, next: 
 };
 
 
-export const submitKYC = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+export const submitKYC = async (
+    req: RequestWithUser, 
+    res: Response, 
+    next: NextFunction
+): 
+    Promise<void> => {
     try {
         const errors = validationResult(req);
-           if (!errors.isEmpty()) {
-             const errorMessages = errors.array().map(err => err.msg);
-              res.status(400).json({
-               status: "failed",
-               message: errorMessages
-             });
-             return;
-           }
+        if (!errors.isEmpty()) {
+            const errorMessages = errors.array().map(err => err.msg);
+            res.status(400).json({
+                status: "failed",
+                message: errorMessages
+            });
+            return;
+        }
+        const files = req.files as {
+            [fieldname: string]: Express.Multer.File[];
+        };
+
+        const front = files?.front_image?.[0];
+        const back = files?.back_image?.[0] || null;
+
+        if (!front) {
+            throw new AppError("Front image is required");
+        }
 
         // Implement KYC submission logic here
-        const {userId, uuid } = req.user!;
+        const { userId } = req.user!;
+        if (!userId) {
+            throw new Error("User ID is required");
+        }
+        const [front_url, back_url] =
+            await Promise.all([
+                uploadToCloudinary(
+                    front.buffer,
+                    "upload/users"
+                ),
+                back ? uploadToCloudinary(
+                    back.buffer,
+                    "upload/users"
+                ) : Promise.resolve(null),
+            ]);
+
         const kycData: KyCSubmission = req.body;
-        res.json({ message: "KYC submitted successfully" });
+        const kycRecord = await submitKYCData(userId, kycData, front_url, back_url!);
+        res.json({
+            status: "success",
+            message: "KYC submitted successfully",
+            data: kycRecord
+        });
     } catch (error) {
         next(error);
     }
