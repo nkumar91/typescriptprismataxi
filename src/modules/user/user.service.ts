@@ -1,6 +1,8 @@
 import {prisma} from "../../config/db.js"
 import { AppError } from "../../utils/error.js";
 import { KYCDocumentType, KyCSubmission } from "./user.types.js";
+import bcrypt from "bcrypt";
+const SALT_ROUNDS = 10;
 export const getProfile = async (uuid: string) => {
     if (!uuid) {
         throw new Error("UUID is required");
@@ -28,6 +30,22 @@ export const getProfile = async (uuid: string) => {
     }
     return user;
 }
+
+
+export const getKycDetails = async (user_id: bigint) => {
+    if (!user_id) {
+        throw new Error("User ID is required");
+    }
+    // Simulate a database lookup
+    const kycDocument = await prisma.kycDocument.findFirst({
+        where: { user_id }
+    });
+    if (!kycDocument) {
+        throw new Error("KYC document not found");
+    }
+    return kycDocument;
+}
+
 
 
 export const submitKYCData = async (
@@ -67,3 +85,46 @@ export const submitKYCData = async (
 }
     return kycRecord;
 }
+
+export const updateProfile = async (uuid: string, name?: string, email?: string, mobile?: string) => {
+  if (!uuid) {
+    throw new AppError("User ID is required", 400);
+  }
+    const updateData: { name?: string; email?: string; mobile?: string } = {};
+    if (name) updateData.name = name;
+    if (email) updateData.email = email;
+    if (mobile) updateData.mobile = mobile;
+    if (Object.keys(updateData).length === 0) {
+        throw new AppError("At least one field (name, email, or mobile) must be provided for update", 400);
+    }
+    const updatedUser = await prisma.user.update({
+        where: { uuid },
+        data: updateData,
+        select: {
+            uuid: true,
+            name: true,
+            email: true,
+            mobile: true,
+            avatar: true,
+            status: true,
+            kyc_status: true,
+            email_verified_at: true,
+            mobile_verified_at: true,
+            created_at: true,
+            updated_at: true,
+        }
+    });
+    return updatedUser;
+};
+
+
+export const resetPassword = async (uuid: string, newPassword: string) => {
+  const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+  if(!hashedPassword) {
+    throw new AppError("Failed to hash password", 500);
+  }
+  return prisma.user.update({ 
+    where: { uuid },
+    data: { password: hashedPassword },
+  });
+};

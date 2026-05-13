@@ -27,6 +27,23 @@ export type KyCSubmission = {
 };
 
 
+export type KycStatusResponse = {
+  id: bigint;
+  user_id: bigint;
+  type: KYCDocumentType;
+  doc_number: string | null;
+  front_url: string;
+  back_url?: string | null;
+  status: KYCStatus;
+  reviewed_at?: Date | null;
+  reviewed_by?: bigint | null;
+  rejection_reason?: string | null;
+  created_at?: Date;
+  updated_at?: Date;
+
+};
+
+
 
 
 

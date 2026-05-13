@@ -6,7 +6,7 @@ import { env } from "../../config/env.js";
 import { randomUUID } from "crypto";
 import { AppError } from "../../utils/error.js";
 import { generateToken, signJwt } from "../../utils/jwt.js";
-import redisClient from "../../config/redis.js";
+
 
 const JWT_SECRET = env.JWT_SECRET || "your-secret-key";
 const SALT_ROUNDS = 10;
@@ -91,7 +91,7 @@ export const verifyEmail = async (token: string) => {
         status: "active",
       },
     });
-  } catch (error) {
+  } catch (error:unknown) {
     throw new AppError("Invalid verification token", 400);
   }
 };

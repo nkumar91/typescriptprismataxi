@@ -165,7 +165,7 @@ export const verifyMobileController = async (req: Request, res: Response, next: 
 };
 
 // Logout controller
-export const logout = async (req: Request, res: Response, next: NextFunction) => {
+export const logout = async (req: Request, res: Response) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -173,7 +173,7 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
     }
     const token = authHeader.split(' ')[1];
     // Verify token is valid
-    const decoded = verifyJwt(token as any);
+    const decoded = verifyJwt(token as string);
     if (!decoded) {
       return res.status(401).json({ status: 'failed', message: 'Invalid or expired token' });
     }

@@ -1,14 +1,19 @@
-import { Response, NextFunction } from "express";
+import { Response, NextFunction, response } from "express";
 import { RequestWithUser } from "../../middleware/auth.middleware.js";
-import { getProfile, submitKYCData } from "./user.service.js";
-import { GetProfileResponse, KyCSubmission } from "./user.types.js";
+import { getKycDetails, getProfile, resetPassword, submitKYCData, updateProfile } from "./user.service.js";
+import { GetProfileResponse, KycStatusResponse, KyCSubmission } from "./user.types.js";
 import { ApiResponse } from "../../utils/types.js";
 import { validationResult } from "express-validator";
 import { AppError } from "../../utils/error.js";
 import { uploadToCloudinary } from "../../utils/utils.js";
 
 
-export const getUserProfile = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+
+export const getUserProfile = async (
+    req: RequestWithUser, 
+    res: Response, 
+    next: NextFunction): Promise<void> => 
+        {
     try {
         const { uuid } = req.user!;
         const userProfile = await getProfile(uuid);
@@ -84,3 +89,83 @@ export const submitKYC = async (
         next(error);
     }
 };
+
+
+export const changePassword = async (
+    req: RequestWithUser, 
+    res: Response, 
+    next: NextFunction): Promise<void> => {
+  try {
+    const { uuid } = req.user!;
+    const {new_password} = req.body;
+    if (!new_password) {
+       res.status(400).json({
+        status: "failed",
+        message: "New password is required"
+      });
+      return;
+    }
+    const user = await resetPassword(uuid!, new_password);
+    if (!user) {
+       res.status(400).json({
+        status: "failed",
+        message: "Invalid or expired password reset token"
+      });
+        return;
+    }
+    const responseData:ApiResponse<null> = {
+      status: "success",
+      message: "Password reset successfully"
+    };
+     res.status(200).json(responseData);
+  } catch (error) {
+    next(error);
+  } 
+};
+
+
+export const getKYCStatus = async (
+    req: RequestWithUser, 
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const {userId } = req.user!;
+        const kycDocument = await getKycDetails(userId!);
+        if (!kycDocument) {
+            res.status(404).json({ message: "KYC document not found" });
+            return;
+        }
+        
+        const responseData: ApiResponse<KycStatusResponse> = {
+            status: "success",
+            message: "KYC status retrieved successfully",
+            data:kycDocument
+        };
+        res.json(responseData);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const updateUserProfile = async (
+    req: RequestWithUser, 
+    res: Response, 
+    next: NextFunction
+): Promise<void> => {
+    try {
+        // Implement profile update logic here
+        const { uuid } = req.user!;
+        const { name, email, mobile } = req.body;
+        const updatedUser = await updateProfile(uuid, name, email, mobile );
+        
+        res.json({
+            status: "success",
+            message: "User profile updated successfully",
+            data: updatedUser
+        });
+    } catch (error) {
+        next(error);
+    }
+}

@@ -13,7 +13,8 @@ export const signJwt = (payload: TokenPayload, expiresIn?: string | number) => {
     try {
         const secret = getJwtSecret();
         return jwt.sign(payload, secret, { expiresIn: expiresIn || JWT_EXPIRE } as SignOptions);
-    } catch (err) {
+    } catch (err:unknown) {
+        console.error('JWT signing failed:', err);
         return null;
     }
 };
@@ -23,11 +24,12 @@ export const generateToken = (payload: TokenPayload, expiresIn?: string | number
         const secret = getJwtSecret();
         return jwt.sign(payload, secret, { expiresIn: expiresIn || JWT_EXPIRE } as SignOptions);
     } catch (err) {
+         console.error('JWT signing failed:', err);
         return null;
     }
 };
 
-export const verifyJwt = <T = any>(token: string): T | null => {
+export const verifyJwt = <T = unknown>(token: string): T | null => {
     try {
         const decoded = jwt.verify(token, getJwtSecret()) as T;
         return decoded;
