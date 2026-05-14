@@ -5,10 +5,15 @@ import { AppError } from '../utils/error.js';
 import { TokenPayload } from '../utils/types.js';
 import { prisma } from '../config/db.js';
 
+const APPROVERD_STATUS = 'approved';
 export interface RequestWithUser extends Request {
     user?: TokenPayload;
 }
-export const vendorAuth = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+export const vendorAuth = async (
+    req: RequestWithUser, 
+    res: Response, next: 
+    NextFunction
+) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({
@@ -40,7 +45,7 @@ export const vendorAuth = async (req: RequestWithUser, res: Response, next: Next
             const checkVendorRole = await prisma.vendor.findUnique({
                 where: { user_id: userId },
             });
-            if (checkVendorRole?.status !== 'approved') {
+            if (checkVendorRole?.status !== APPROVERD_STATUS) {
                 return res.status(403).json({
                     status: 'failed',
                     message: 'Forbidden: Insufficient permissions'

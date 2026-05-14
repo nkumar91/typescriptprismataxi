@@ -84,14 +84,14 @@ export const submitKYCData = async (
         }
     });
     }
+    const KYC_STATUS_PENDING = "pending";
     const kycStatus = await prisma.user.update({
         where: { id: userId },
-        data: { kyc_status: "pending" }
+        data: { kyc_status: KYC_STATUS_PENDING }
     });
     if(!kycStatus) {
         throw new AppError("Failed to update KYC status", 500);
     }
-
     return kycRecord;
 }
 
