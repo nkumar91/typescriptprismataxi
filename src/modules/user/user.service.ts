@@ -60,6 +60,7 @@ export const submitKYCData = async (
     if(!doc_number){
         throw new AppError("Document number is required");
     }
+
     let kycRecord;
     if(back_url){
          kycRecord = await prisma.kycDocument.create({
@@ -82,7 +83,15 @@ export const submitKYCData = async (
             front_url,
         }
     });
-}
+    }
+    const kycStatus = await prisma.user.update({
+        where: { id: userId },
+        data: { kyc_status: "pending" }
+    });
+    if(!kycStatus) {
+        throw new AppError("Failed to update KYC status", 500);
+    }
+
     return kycRecord;
 }
 

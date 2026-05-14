@@ -34,6 +34,28 @@ export const getUserProfile = async (
 };
 
 
+
+export const getUserBookings = async (
+    req: RequestWithUser, 
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const { uuid } = req.user!;
+        // Implement logic to fetch user bookings here
+        const bookings = []; // Replace with actual bookings data
+        const responseData: ApiResponse<any[]> = {
+            status: "success",
+            message: "User bookings retrieved successfully",
+            // data: bookings
+        };
+        res.json(responseData);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 export const submitKYC = async (
     req: RequestWithUser, 
     res: Response, 

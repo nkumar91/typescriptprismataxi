@@ -290,7 +290,7 @@ export type CityCreateInput = {
   id?: bigint | number
   name: string
   state: string
-  country: string
+  country?: string
   is_active?: boolean
   created_at?: Date | string | null
   updated_at?: Date | string | null
@@ -300,7 +300,7 @@ export type CityUncheckedCreateInput = {
   id?: bigint | number
   name: string
   state: string
-  country: string
+  country?: string
   is_active?: boolean
   created_at?: Date | string | null
   updated_at?: Date | string | null
@@ -330,7 +330,7 @@ export type CityCreateManyInput = {
   id?: bigint | number
   name: string
   state: string
-  country: string
+  country?: string
   is_active?: boolean
   created_at?: Date | string | null
   updated_at?: Date | string | null

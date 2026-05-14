@@ -30,6 +30,11 @@ userRouter.get(
   createLimiter(1,60),
   userController.getKYCStatus
 );
+userRouter.get(
+  "/bookings", 
+  createLimiter(1,60),
+  userController.getUserBookings
+);
 userRouter.put(
   "/password", 
   createLimiter(1,10),

@@ -28,15 +28,17 @@ export const registerUser = async (data: CreateUserInput) => {
   if (data.password) {
     data.password = await bcrypt.hash(data.password, SALT_ROUNDS);
   }
+  // Generate UUID for the new user
   const uuid = randomUUID();
   if(!uuid) {
     throw new AppError("Failed to generate UUID", 500);
   }
   data.uuid = uuid;
+  // Create the user in the database
   return prisma.user.create({
     data: {
       ...data,
-      status: "pending",
+      status: "active", // Set default status to active, you can change this as per your requirements
       kyc_status: "not_submitted",
     },
   });
@@ -66,7 +68,7 @@ export const loginUser = async (data: LoginInput) => {
     userId: user.id,
     uuid: user.uuid,
     email: user.email,
-    type: "login_access",
+    type: "user_auth",
   });
   return { user, token };
 };
