@@ -11,4 +11,7 @@ export interface TokenPayload {
     uuid: string;
     email: string;
     type?: string;
+    vendorId?: bigint;
+    iat?: number;
+    exp?: number;
 }

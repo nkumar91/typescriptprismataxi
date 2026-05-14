@@ -240,6 +240,7 @@ export type CarImageWhereInput = {
   is_primary?: Prisma.BoolFilter<"CarImage"> | boolean
   sort_order?: Prisma.IntFilter<"CarImage"> | number
   created_at?: Prisma.DateTimeNullableFilter<"CarImage"> | Date | string | null
+  car?: Prisma.XOR<Prisma.CarScalarRelationFilter, Prisma.CarWhereInput>
 }
 
 export type CarImageOrderByWithRelationInput = {
@@ -250,6 +251,7 @@ export type CarImageOrderByWithRelationInput = {
   is_primary?: Prisma.SortOrder
   sort_order?: Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  car?: Prisma.CarOrderByWithRelationInput
   _relevance?: Prisma.CarImageOrderByRelevanceInput
 }
 
@@ -264,6 +266,7 @@ export type CarImageWhereUniqueInput = Prisma.AtLeast<{
   is_primary?: Prisma.BoolFilter<"CarImage"> | boolean
   sort_order?: Prisma.IntFilter<"CarImage"> | number
   created_at?: Prisma.DateTimeNullableFilter<"CarImage"> | Date | string | null
+  car?: Prisma.XOR<Prisma.CarScalarRelationFilter, Prisma.CarWhereInput>
 }, "id">
 
 export type CarImageOrderByWithAggregationInput = {
@@ -296,12 +299,12 @@ export type CarImageScalarWhereWithAggregatesInput = {
 
 export type CarImageCreateInput = {
   id?: bigint | number
-  car_id: bigint | number
   url: string
   thumbnail_url?: string | null
   is_primary?: boolean
   sort_order?: number
   created_at?: Date | string | null
+  car: Prisma.CarCreateNestedOneWithoutCar_imageInput
 }
 
 export type CarImageUncheckedCreateInput = {
@@ -316,12 +319,12 @@ export type CarImageUncheckedCreateInput = {
 
 export type CarImageUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  car_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   url?: Prisma.StringFieldUpdateOperationsInput | string
   thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_primary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sort_order?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  car?: Prisma.CarUpdateOneRequiredWithoutCar_imageNestedInput
 }
 
 export type CarImageUncheckedUpdateInput = {
@@ -346,7 +349,6 @@ export type CarImageCreateManyInput = {
 
 export type CarImageUpdateManyMutationInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  car_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   url?: Prisma.StringFieldUpdateOperationsInput | string
   thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_primary?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -412,8 +414,153 @@ export type CarImageSumOrderByAggregateInput = {
   sort_order?: Prisma.SortOrder
 }
 
+export type CarImageListRelationFilter = {
+  every?: Prisma.CarImageWhereInput
+  some?: Prisma.CarImageWhereInput
+  none?: Prisma.CarImageWhereInput
+}
+
+export type CarImageOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
+}
+
+export type CarImageCreateNestedManyWithoutCarInput = {
+  create?: Prisma.XOR<Prisma.CarImageCreateWithoutCarInput, Prisma.CarImageUncheckedCreateWithoutCarInput> | Prisma.CarImageCreateWithoutCarInput[] | Prisma.CarImageUncheckedCreateWithoutCarInput[]
+  connectOrCreate?: Prisma.CarImageCreateOrConnectWithoutCarInput | Prisma.CarImageCreateOrConnectWithoutCarInput[]
+  createMany?: Prisma.CarImageCreateManyCarInputEnvelope
+  connect?: Prisma.CarImageWhereUniqueInput | Prisma.CarImageWhereUniqueInput[]
+}
+
+export type CarImageUncheckedCreateNestedManyWithoutCarInput = {
+  create?: Prisma.XOR<Prisma.CarImageCreateWithoutCarInput, Prisma.CarImageUncheckedCreateWithoutCarInput> | Prisma.CarImageCreateWithoutCarInput[] | Prisma.CarImageUncheckedCreateWithoutCarInput[]
+  connectOrCreate?: Prisma.CarImageCreateOrConnectWithoutCarInput | Prisma.CarImageCreateOrConnectWithoutCarInput[]
+  createMany?: Prisma.CarImageCreateManyCarInputEnvelope
+  connect?: Prisma.CarImageWhereUniqueInput | Prisma.CarImageWhereUniqueInput[]
+}
+
+export type CarImageUpdateManyWithoutCarNestedInput = {
+  create?: Prisma.XOR<Prisma.CarImageCreateWithoutCarInput, Prisma.CarImageUncheckedCreateWithoutCarInput> | Prisma.CarImageCreateWithoutCarInput[] | Prisma.CarImageUncheckedCreateWithoutCarInput[]
+  connectOrCreate?: Prisma.CarImageCreateOrConnectWithoutCarInput | Prisma.CarImageCreateOrConnectWithoutCarInput[]
+  upsert?: Prisma.CarImageUpsertWithWhereUniqueWithoutCarInput | Prisma.CarImageUpsertWithWhereUniqueWithoutCarInput[]
+  createMany?: Prisma.CarImageCreateManyCarInputEnvelope
+  set?: Prisma.CarImageWhereUniqueInput | Prisma.CarImageWhereUniqueInput[]
+  disconnect?: Prisma.CarImageWhereUniqueInput | Prisma.CarImageWhereUniqueInput[]
+  delete?: Prisma.CarImageWhereUniqueInput | Prisma.CarImageWhereUniqueInput[]
+  connect?: Prisma.CarImageWhereUniqueInput | Prisma.CarImageWhereUniqueInput[]
+  update?: Prisma.CarImageUpdateWithWhereUniqueWithoutCarInput | Prisma.CarImageUpdateWithWhereUniqueWithoutCarInput[]
+  updateMany?: Prisma.CarImageUpdateManyWithWhereWithoutCarInput | Prisma.CarImageUpdateManyWithWhereWithoutCarInput[]
+  deleteMany?: Prisma.CarImageScalarWhereInput | Prisma.CarImageScalarWhereInput[]
+}
+
+export type CarImageUncheckedUpdateManyWithoutCarNestedInput = {
+  create?: Prisma.XOR<Prisma.CarImageCreateWithoutCarInput, Prisma.CarImageUncheckedCreateWithoutCarInput> | Prisma.CarImageCreateWithoutCarInput[] | Prisma.CarImageUncheckedCreateWithoutCarInput[]
+  connectOrCreate?: Prisma.CarImageCreateOrConnectWithoutCarInput | Prisma.CarImageCreateOrConnectWithoutCarInput[]
+  upsert?: Prisma.CarImageUpsertWithWhereUniqueWithoutCarInput | Prisma.CarImageUpsertWithWhereUniqueWithoutCarInput[]
+  createMany?: Prisma.CarImageCreateManyCarInputEnvelope
+  set?: Prisma.CarImageWhereUniqueInput | Prisma.CarImageWhereUniqueInput[]
+  disconnect?: Prisma.CarImageWhereUniqueInput | Prisma.CarImageWhereUniqueInput[]
+  delete?: Prisma.CarImageWhereUniqueInput | Prisma.CarImageWhereUniqueInput[]
+  connect?: Prisma.CarImageWhereUniqueInput | Prisma.CarImageWhereUniqueInput[]
+  update?: Prisma.CarImageUpdateWithWhereUniqueWithoutCarInput | Prisma.CarImageUpdateWithWhereUniqueWithoutCarInput[]
+  updateMany?: Prisma.CarImageUpdateManyWithWhereWithoutCarInput | Prisma.CarImageUpdateManyWithWhereWithoutCarInput[]
+  deleteMany?: Prisma.CarImageScalarWhereInput | Prisma.CarImageScalarWhereInput[]
+}
+
+export type CarImageCreateWithoutCarInput = {
+  id?: bigint | number
+  url: string
+  thumbnail_url?: string | null
+  is_primary?: boolean
+  sort_order?: number
+  created_at?: Date | string | null
+}
+
+export type CarImageUncheckedCreateWithoutCarInput = {
+  id?: bigint | number
+  url: string
+  thumbnail_url?: string | null
+  is_primary?: boolean
+  sort_order?: number
+  created_at?: Date | string | null
+}
+
+export type CarImageCreateOrConnectWithoutCarInput = {
+  where: Prisma.CarImageWhereUniqueInput
+  create: Prisma.XOR<Prisma.CarImageCreateWithoutCarInput, Prisma.CarImageUncheckedCreateWithoutCarInput>
+}
+
+export type CarImageCreateManyCarInputEnvelope = {
+  data: Prisma.CarImageCreateManyCarInput | Prisma.CarImageCreateManyCarInput[]
+  skipDuplicates?: boolean
+}
+
+export type CarImageUpsertWithWhereUniqueWithoutCarInput = {
+  where: Prisma.CarImageWhereUniqueInput
+  update: Prisma.XOR<Prisma.CarImageUpdateWithoutCarInput, Prisma.CarImageUncheckedUpdateWithoutCarInput>
+  create: Prisma.XOR<Prisma.CarImageCreateWithoutCarInput, Prisma.CarImageUncheckedCreateWithoutCarInput>
+}
+
+export type CarImageUpdateWithWhereUniqueWithoutCarInput = {
+  where: Prisma.CarImageWhereUniqueInput
+  data: Prisma.XOR<Prisma.CarImageUpdateWithoutCarInput, Prisma.CarImageUncheckedUpdateWithoutCarInput>
+}
+
+export type CarImageUpdateManyWithWhereWithoutCarInput = {
+  where: Prisma.CarImageScalarWhereInput
+  data: Prisma.XOR<Prisma.CarImageUpdateManyMutationInput, Prisma.CarImageUncheckedUpdateManyWithoutCarInput>
+}
+
+export type CarImageScalarWhereInput = {
+  AND?: Prisma.CarImageScalarWhereInput | Prisma.CarImageScalarWhereInput[]
+  OR?: Prisma.CarImageScalarWhereInput[]
+  NOT?: Prisma.CarImageScalarWhereInput | Prisma.CarImageScalarWhereInput[]
+  id?: Prisma.BigIntFilter<"CarImage"> | bigint | number
+  car_id?: Prisma.BigIntFilter<"CarImage"> | bigint | number
+  url?: Prisma.StringFilter<"CarImage"> | string
+  thumbnail_url?: Prisma.StringNullableFilter<"CarImage"> | string | null
+  is_primary?: Prisma.BoolFilter<"CarImage"> | boolean
+  sort_order?: Prisma.IntFilter<"CarImage"> | number
+  created_at?: Prisma.DateTimeNullableFilter<"CarImage"> | Date | string | null
+}
+
+export type CarImageCreateManyCarInput = {
+  id?: bigint | number
+  url: string
+  thumbnail_url?: string | null
+  is_primary?: boolean
+  sort_order?: number
+  created_at?: Date | string | null
+}
+
+export type CarImageUpdateWithoutCarInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_primary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sort_order?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type CarImageUncheckedUpdateWithoutCarInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_primary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sort_order?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type CarImageUncheckedUpdateManyWithoutCarInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_primary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sort_order?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -426,6 +573,7 @@ export type CarImageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   is_primary?: boolean
   sort_order?: boolean
   created_at?: boolean
+  car?: boolean | Prisma.CarDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["carImage"]>
 
 
@@ -441,10 +589,15 @@ export type CarImageSelectScalar = {
 }
 
 export type CarImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "car_id" | "url" | "thumbnail_url" | "is_primary" | "sort_order" | "created_at", ExtArgs["result"]["carImage"]>
+export type CarImageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  car?: boolean | Prisma.CarDefaultArgs<ExtArgs>
+}
 
 export type $CarImagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CarImage"
-  objects: {}
+  objects: {
+    car: Prisma.$CarPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
     car_id: bigint
@@ -793,6 +946,7 @@ readonly fields: CarImageFieldRefs;
  */
 export interface Prisma__CarImageClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  car<T extends Prisma.CarDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CarDefaultArgs<ExtArgs>>): Prisma.Prisma__CarClient<runtime.Types.Result.GetResult<Prisma.$CarPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -846,6 +1000,10 @@ export type CarImageFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.CarImageOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CarImageInclude<ExtArgs> | null
+  /**
    * Filter, which CarImage to fetch.
    */
   where: Prisma.CarImageWhereUniqueInput
@@ -864,6 +1022,10 @@ export type CarImageFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.CarImageOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CarImageInclude<ExtArgs> | null
+  /**
    * Filter, which CarImage to fetch.
    */
   where: Prisma.CarImageWhereUniqueInput
@@ -881,6 +1043,10 @@ export type CarImageFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the CarImage
    */
   omit?: Prisma.CarImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CarImageInclude<ExtArgs> | null
   /**
    * Filter, which CarImage to fetch.
    */
@@ -930,6 +1096,10 @@ export type CarImageFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.CarImageOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CarImageInclude<ExtArgs> | null
+  /**
    * Filter, which CarImage to fetch.
    */
   where?: Prisma.CarImageWhereInput
@@ -977,6 +1147,10 @@ export type CarImageFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the CarImage
    */
   omit?: Prisma.CarImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CarImageInclude<ExtArgs> | null
   /**
    * Filter, which CarImages to fetch.
    */
@@ -1026,6 +1200,10 @@ export type CarImageCreateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.CarImageOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CarImageInclude<ExtArgs> | null
+  /**
    * The data needed to create a CarImage.
    */
   data: Prisma.XOR<Prisma.CarImageCreateInput, Prisma.CarImageUncheckedCreateInput>
@@ -1054,6 +1232,10 @@ export type CarImageUpdateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the CarImage
    */
   omit?: Prisma.CarImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CarImageInclude<ExtArgs> | null
   /**
    * The data needed to update a CarImage.
    */
@@ -1095,6 +1277,10 @@ export type CarImageUpsertArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.CarImageOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CarImageInclude<ExtArgs> | null
+  /**
    * The filter to search for the CarImage to update in case it exists.
    */
   where: Prisma.CarImageWhereUniqueInput
@@ -1120,6 +1306,10 @@ export type CarImageDeleteArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the CarImage
    */
   omit?: Prisma.CarImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CarImageInclude<ExtArgs> | null
   /**
    * Filter which CarImage to delete.
    */
@@ -1152,4 +1342,8 @@ export type CarImageDefaultArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the CarImage
    */
   omit?: Prisma.CarImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CarImageInclude<ExtArgs> | null
 }

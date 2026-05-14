@@ -41,6 +41,7 @@ model Car {
   created_at     DateTime?  @default(now())
   updated_at     DateTime?  @updatedAt
   deleted_at     DateTime?
+  car_image      CarImage[]
 
   @@index([vendor_id])
   @@index([city_id])

@@ -10,9 +10,9 @@ export interface RequestWithUser extends Request {
     user?: TokenPayload;
 }
 export const vendorAuth = async (
-    req: RequestWithUser, 
-    res: Response, next: 
-    NextFunction
+    req: RequestWithUser,
+    res: Response, next:
+        NextFunction
 ) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -39,7 +39,7 @@ export const vendorAuth = async (
                 message: 'Your token has been revoked'
             });
         }
-       // Check if user has vendor role
+        // Check if user has vendor role
         const { userId } = decoded;
         if (userId) {
             const checkVendorRole = await prisma.vendor.findUnique({
@@ -51,6 +51,8 @@ export const vendorAuth = async (
                     message: 'Forbidden: Insufficient permissions'
                 });
             }
+            // Ensure vendorId is included in the request object for downstream use
+            decoded.vendorId = checkVendorRole?.id;
         }
         req.user = decoded;
         next();

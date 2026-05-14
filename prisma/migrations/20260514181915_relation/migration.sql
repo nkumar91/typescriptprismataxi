@@ -1,0 +1,2 @@
+-- AddForeignKey
+ALTER TABLE `CarImage` ADD CONSTRAINT `CarImage_car_id_fkey` FOREIGN KEY (`car_id`) REFERENCES `Car`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
