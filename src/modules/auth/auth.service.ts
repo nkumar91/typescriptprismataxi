@@ -49,14 +49,14 @@ export const registerUser = async (data: CreateUserInput) => {
 
 export const loginUser = async (data: LoginInput) => {
   const user = await prisma.user.findUnique({
-    where: { email: data.email },
+    where: { email: data.email,deleted_at:null },
   });
   if (!user || !user.password) {
-    throw new AppError("Invalid email", 401);
+    throw new AppError("Invalid email or account has been deleted", 401);
   }
-  // if(user.status !== "active") {
-  //   throw new AppError("User account is not active verification required", 403);
-  // }
+  if(user.status !== "active") {
+    throw new AppError("User account is not active verification required", 403);
+  }
   const isValidPassword = await bcrypt.compare(data.password, user.password);
   if (!isValidPassword) {
     throw new AppError("Invalid password", 401);

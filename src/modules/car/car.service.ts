@@ -1,4 +1,3 @@
-
 import { prisma } from "../../config/db.js";
 import { Prisma } from "../../generated/prisma/client.js";
 import { CarCreateInput } from "../../generated/prisma/models.js";
@@ -7,9 +6,13 @@ import {
     CarFeatures, 
     CarResponse, 
     CarStatus, 
-    CreateCarInput 
+    CreateCarInput, 
+    UpdateCarInput
 } from "./car.types.js";
 import { randomUUID } from "crypto";
+
+
+// createCarService: create a new car record for a given vendor
 export const createCarService = async (
     carData: CreateCarInput,
     vendorId: bigint,
@@ -54,8 +57,7 @@ export const createCarService = async (
     };
 };
 
-
-
+// uploadCarImageService: upload an image record for a specific car
 export const uploadCarImageService = async (
     carId: bigint,
     url: string,
@@ -73,8 +75,8 @@ export const uploadCarImageService = async (
          uploadedUrl = await prisma.carImage.create({
         data: {
             car_id: carId!,
-            url: url!, // Assuming the URL is passed directly
-            thumbnail_url: thumbnail_url!, // Assuming the thumbnail URL is passed directly
+            url: url!, 
+            thumbnail_url: thumbnail_url!,
         },
     });
     }
@@ -82,7 +84,7 @@ export const uploadCarImageService = async (
         uploadedUrl = await prisma.carImage.create({
         data: {
             car_id: carId!,
-            url: url!, // Assuming the URL is passed directly
+            url: url!,
         },
     });
     }
@@ -91,7 +93,8 @@ export const uploadCarImageService = async (
 }
 
 
-export const getAllCarsService = async (limit: number): Promise<CarResponse[]> => {// Default to 20 if not set in environment variables
+// getAllCarsService: retrieve a list of all non-deleted cars with a limit
+export const getAllCarsService = async (limit: number): Promise<CarResponse[]> => {
     const cars = await prisma.car.findMany({
         where: {
             deleted_at: null, // Only include non-deleted cars
@@ -111,6 +114,7 @@ export const getAllCarsService = async (limit: number): Promise<CarResponse[]> =
 };
 
 
+// getCarByIdService: fetch a single car by its ID if it exists and is not deleted
 export const getCarByIdService = async (carId: bigint): Promise<CarResponse> => {
     const car = await prisma.car.findUnique({
         where: { id: carId, deleted_at: null }, // Ensure we only fetch non-deleted cars
@@ -128,6 +132,7 @@ export const getCarByIdService = async (carId: bigint): Promise<CarResponse> => 
 }
 
 
+// deleteCarService: mark a car as deleted by setting deleted_at timestamp
 export const deleteCarService = async (carId: bigint): Promise<CarResponse> => {
     const car = await prisma.car.findUnique({
         where: { id: carId },
@@ -145,6 +150,7 @@ export const deleteCarService = async (carId: bigint): Promise<CarResponse> => {
     };;
 }
 
+// deleteCarImageService: delete a car image record by image ID
 export const deleteCarImageService = async (imgId: bigint) => {
     const carImage = await prisma.carImage.findUnique({
         where: { id: imgId },
@@ -158,6 +164,7 @@ export const deleteCarImageService = async (imgId: bigint) => {
 }
 
 
+// updateCarStatusService: update the availability status of a car
 export const updateCarStatusService = async (carId: bigint, status: CarStatus): Promise<CarResponse> => {
     const car = await prisma.car.findUnique({
         where: { id: carId ,deleted_at: null}, // Ensure we only update non-deleted cars
@@ -176,6 +183,7 @@ export const updateCarStatusService = async (carId: bigint, status: CarStatus): 
 }
 
 
+// getCarAvailabilityService: check if a specific car is available based on its status
 export const getCarAvailabilityService = async (carId: bigint): Promise<{ available: boolean; status: CarStatus }> => {
     const AVAILABLE_STATUSES: CarStatus[] = ["available"];
     const car = await prisma.car.findUnique({
@@ -188,6 +196,49 @@ export const getCarAvailabilityService = async (carId: bigint): Promise<{ availa
     return {
         available: isAvailable,
         status: car.status,
+    };
+}
+
+// getCarsByCityService: retrieve non-deleted cars available in a specific city
+export const getCarsByCityService = async (cityId: bigint): Promise<CarResponse[]> => {
+    const cars = await prisma.car.findMany({
+        where: {
+            city_id: cityId,
+            deleted_at: null, // Only include non-deleted cars
+        },
+        include: {
+            car_image: true,
+        },
+    });
+    if(cars.length === 0){
+        throw new AppError("No cars found for the specified city or all cars in that city have been deleted", 404);
+    }
+    return cars.map(car => ({
+        ...car,
+        features: car.features as CarFeatures,
+    }));
+}
+
+
+
+// updateCarService: update fields for an existing non-deleted car
+export const updateCarService = async (carId: bigint, updateData: UpdateCarInput): Promise<CarResponse> => {
+    const car = await prisma.car.findUnique({
+        where: { id: carId, deleted_at: null }, // Ensure we only update non-deleted cars
+    });
+    if (!car) {
+        throw new AppError("Car not found or has been deleted", 404);
+    }
+    const updatedCar = await prisma.car.update({
+        where: { id: carId },
+        data: {
+            ...updateData,
+            features: updateData.features !== undefined ? (updateData.features === null ? Prisma.JsonNull : updateData.features) : car.features!,
+        },
+    });
+    return {
+        ...updatedCar,
+        features: updatedCar.features as CarFeatures,
     };
 }
 

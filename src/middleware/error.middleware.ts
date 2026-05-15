@@ -9,7 +9,7 @@ export const errorHandler = (
     const statusCode = error.statusCode || 500;
 
     return res.status(statusCode).json({
-        success: "failed",
+        status: "failed",
         message: error.message || "Internal Server Error",
     });
 };

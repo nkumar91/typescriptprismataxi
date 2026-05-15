@@ -8,8 +8,8 @@ export type ApiResponse<T = unknown> = {
 
 export interface TokenPayload {
     userId?: bigint;
-    uuid: string;
-    email: string;
+    uuid?: string;
+    email?: string;
     type?: string;
     vendorId?: bigint;
     iat?: number;

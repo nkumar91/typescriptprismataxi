@@ -33,6 +33,26 @@ export type CreateCarInput = {
     is_featured?: boolean;
 };
 
+export type UpdateCarInput = {
+    name?: string;
+    brand?: string;
+    model?: string;
+    year?: number;
+    fuel_type?: FuelType;
+    transmission?: TransmissionType;
+    seats?: number;
+    price_per_day?: Prisma.Decimal;
+    security_deposit?: Prisma.Decimal;
+    status?: CarStatus;
+    features?: CarFeatures;
+    description?: string | null;
+    mileage?: Prisma.Decimal | null;
+    is_featured?: boolean;
+    city_id?: bigint;
+    location_id?: bigint;
+};
+
+
 export type uploadCarImageInput = {
     car_id: bigint;
     url: Express.Multer.File;

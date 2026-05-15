@@ -18,6 +18,8 @@ const envSchema = z.object({
   CLOUDINARY_API_KEY: z.string(),
   CLOUDINARY_API_SECRET: z.string(),
   PAGE_LIMIT: z.string().default("20"),
+  ADMIN_EMAIL:z.string().default(""),
+  ADMIN_PASSWORD:z.string().default("")
 });
 
 export const env = envSchema.parse(process.env);

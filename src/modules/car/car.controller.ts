@@ -1,17 +1,19 @@
-import { Response, NextFunction ,Request} from 'express';
-import { CarImageResponse, CarResponse, CarStatus, CreateCarInput, paramsType } from './car.types.js';
-import { 
-    createCarService, 
-    deleteCarImageService, 
-    deleteCarService, 
-    getAllCarsService, 
-    getCarAvailabilityService, 
-    getCarByIdService, 
-    updateCarStatusService, 
-    uploadCarImageService 
+import { Response, NextFunction, Request } from 'express';
+import { CarImageResponse, CarResponse, CarStatus, CreateCarInput, paramsType, UpdateCarInput } from './car.types.js';
+import {
+    createCarService,
+    deleteCarImageService,
+    deleteCarService,
+    getAllCarsService,
+    getCarAvailabilityService,
+    getCarByIdService,
+    getCarsByCityService,
+    updateCarService,
+    updateCarStatusService,
+    uploadCarImageService
 } from './car.service.js';
 import { ApiResponse } from '../../utils/types.js';
-import {uploadToCloudinary } from '../../utils/utils.js';
+import { uploadToCloudinary } from '../../utils/utils.js';
 import { AppError } from '../../utils/error.js';
 import { RequestWithUser } from '../../middleware/vendor.middleware.js';
 import { validationResult } from 'express-validator';
@@ -26,14 +28,14 @@ export const createCar = async (
 ) => {
     try {
         // Validate input data here (e.g., using a validation library)
-         const errors = validationResult(req);
-          if (!errors.isEmpty()) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
             const errorMessages = errors.array().map(err => err.msg);
             return res.status(400).json({
-              status: "failed",
-              message: errorMessages
+                status: "failed",
+                message: errorMessages
             });
-          }
+        }
         const carData: CreateCarInput = req.body;
         const { vendorId } = req.user!;
         // Call service layer to create the car
@@ -50,6 +52,43 @@ export const createCar = async (
         };
         return res.status(201).json(responseData);
     } catch (error) {
+        next(error); // Pass errors to the error handling middleware
+    }
+};
+
+export const updateCar = async (
+    req: RequestWithUser,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorMessages = errors.array().map(err => err.msg);
+            return res.status(400).json({
+                status: "failed",
+                message: errorMessages
+            });
+        }
+        const paramData: paramsType = req.params!;
+        if (!paramData.id) {
+            throw new AppError("Car ID is required");
+        }
+        const carData: UpdateCarInput = req.body;
+        // Call service layer to update the car
+        const updatedCar = await updateCarService(paramData.id, carData);
+        if (!updatedCar) {
+            throw new AppError("Failed to update car", 500);
+        }
+        // Respond with the updated car data
+        const responseData: ApiResponse<CarResponse> = {
+            status: 'success',
+            message: 'Car updated successfully',
+            data: updatedCar
+        };
+        return res.status(200).json(responseData);
+    }
+    catch (error) {
         next(error); // Pass errors to the error handling middleware
     }
 };
@@ -71,7 +110,7 @@ export const uploadCarImage = async (
         if (!url) {
             throw new AppError("Car Image is required");
         }
-        const paramData:paramsType = req.params!;
+        const paramData: paramsType = req.params!;
         if (!paramData.id) {
             throw new AppError("Car ID is required");
         }
@@ -87,7 +126,7 @@ export const uploadCarImage = async (
                 ) : Promise.resolve(null),
             ]);
         // Call service layer to upload the car image
-         const newImage = await uploadCarImageService(paramData.id, _url, _thumbnail_url!);
+        const newImage = await uploadCarImageService(paramData.id, _url, _thumbnail_url!);
         // Respond with the uploaded image data
         const responseData: ApiResponse<CarImageResponse> = {
             status: 'success',
@@ -130,7 +169,7 @@ export const getCarAvailability = async (
 ) => {
     try {
         // Implement logic to check a car's availability
-        const paramData:paramsType = req.params!;
+        const paramData: paramsType = req.params!;
         if (!paramData.id) {
             throw new AppError("Car ID is required");
         }
@@ -140,14 +179,14 @@ export const getCarAvailability = async (
         const responseData: ApiResponse<{ available: boolean; status: CarStatus }> = {
             status: 'success',
             message: 'Car availability retrieved successfully',
-            data: { 
-                available: availability.available, 
-                status: availability.status 
+            data: {
+                available: availability.available,
+                status: availability.status
             }
         };
         return res.status(200).json(responseData);
     }
-        catch (error) {
+    catch (error) {
         next(error); // Pass errors to the error handling middleware
     }
 };
@@ -160,13 +199,13 @@ export const getCarById = async (
 ) => {
     try {
         // Implement logic to get a car by its ID
-        const paramData:paramsType = req.params!;
+        const paramData: paramsType = req.params!;
         if (!paramData.id) {
             throw new AppError("Car ID is required");
         }
         //Call service layer to get the car by ID
         const car = await getCarByIdService(paramData.id);
-        if (!car) {  
+        if (!car) {
             throw new AppError("Car not found", 404);
         }
         //Respond with the car data
@@ -178,8 +217,8 @@ export const getCarById = async (
         return res.status(200).json(responseData);
     } catch (error) {
         next(error); // Pass errors to the error handling middleware
-    }    
-};       
+    }
+};
 
 
 export const deleteCar = async (
@@ -189,7 +228,7 @@ export const deleteCar = async (
 ) => {
     try {
         // Implement logic to delete a car by its ID
-        const paramData:paramsType = req.params!;
+        const paramData: paramsType = req.params!;
         if (!paramData.id) {
             throw new AppError("Car ID is required");
         }
@@ -215,7 +254,7 @@ export const deleteCarImage = async (
 ) => {
     try {
         // Implement logic to delete a car image by its ID
-        const paramData:paramsType = req.params!;
+        const paramData: paramsType = req.params!;
         if (!paramData.id || !paramData.imgId) {
             throw new AppError("Car ID and Image ID are required");
         }
@@ -245,11 +284,11 @@ export const updateCarStatus = async (
         if (!errors.isEmpty()) {
             const errorMessages = errors.array().map(err => err.msg);
             return res.status(400).json({
-              status: "failed",
-              message: errorMessages
+                status: "failed",
+                message: errorMessages
             });
         }
-        const paramData:paramsType = req.params!;
+        const paramData: paramsType = req.params!;
         if (!paramData.id) {
             throw new AppError("Car ID is required");
         }
@@ -264,6 +303,31 @@ export const updateCarStatus = async (
             status: 'success',
             message: 'Car status updated successfully',
             data: updatedCar
+        };
+        return res.status(200).json(responseData);
+    } catch (error) {
+        next(error); // Pass errors to the error handling middleware
+    }
+};
+
+
+export const getCarsByCity = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const paramData: paramsType = req.params!;
+        if (!paramData.cityId) {
+            throw new AppError("City ID is required");
+        }
+        // Call service layer to get cars by city ID
+        const cars = await getCarsByCityService(paramData.cityId);
+        // Respond with the list of cars in the specified city
+        const responseData: ApiResponse<CarResponse[]> = {
+            status: 'success',
+            message: 'Cars retrieved successfully for the specified city',
+            data: cars
         };
         return res.status(200).json(responseData);
     } catch (error) {

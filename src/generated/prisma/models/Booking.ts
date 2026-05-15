@@ -810,20 +810,8 @@ export type BigIntFieldUpdateOperationsInput = {
   divide?: bigint | number
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
-}
-
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
-}
-
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type DecimalFieldUpdateOperationsInput = {
@@ -844,10 +832,6 @@ export type NullableBigIntFieldUpdateOperationsInput = {
 
 export type EnumBookingStatusFieldUpdateOperationsInput = {
   set?: $Enums.BookingStatus
-}
-
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
 }
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
