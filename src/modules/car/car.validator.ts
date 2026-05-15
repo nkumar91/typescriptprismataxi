@@ -21,3 +21,9 @@ export const validateCreateCarInput:ValidationChain[] = [
     body('fuel_type').isIn(['petrol', 'diesel', 'electric', 'cng', 'hybrid']).withMessage('Fuel type must be one of: petrol, diesel, electric, cng, hybrid'),
        // Add more validation rules as needed
 ];
+
+
+
+export const carUpdateStatusValidation: ValidationChain[] = [
+    body('status').isIn(['available', 'booked', 'maintenance', 'inactive']).withMessage('Status must be one of: available, booked, maintenance, inactive'),
+];

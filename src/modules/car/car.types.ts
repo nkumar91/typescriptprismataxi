@@ -80,4 +80,6 @@ export type CarResponse = {
 
 export type paramsType = {
     id?: bigint;
+    imgId?: bigint;
+    cityId?: bigint;
 };

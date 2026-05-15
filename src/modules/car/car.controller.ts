@@ -1,6 +1,15 @@
 import { Response, NextFunction ,Request} from 'express';
-import { CarImageResponse, CarResponse, CreateCarInput, paramsType } from './car.types.js';
-import { createCarService, getAllCarsService, uploadCarImageService } from './car.service.js';
+import { CarImageResponse, CarResponse, CarStatus, CreateCarInput, paramsType } from './car.types.js';
+import { 
+    createCarService, 
+    deleteCarImageService, 
+    deleteCarService, 
+    getAllCarsService, 
+    getCarAvailabilityService, 
+    getCarByIdService, 
+    updateCarStatusService, 
+    uploadCarImageService 
+} from './car.service.js';
 import { ApiResponse } from '../../utils/types.js';
 import {uploadToCloudinary } from '../../utils/utils.js';
 import { AppError } from '../../utils/error.js';
@@ -113,4 +122,152 @@ export const getAllCars = async (
     }
 };
 
+
+export const getCarAvailability = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        // Implement logic to check a car's availability
+        const paramData:paramsType = req.params!;
+        if (!paramData.id) {
+            throw new AppError("Car ID is required");
+        }
+        // Call service layer to get the car's availability
+        const availability = await getCarAvailabilityService(paramData.id);
+        // Respond with the car's availability status
+        const responseData: ApiResponse<{ available: boolean; status: CarStatus }> = {
+            status: 'success',
+            message: 'Car availability retrieved successfully',
+            data: { 
+                available: availability.available, 
+                status: availability.status 
+            }
+        };
+        return res.status(200).json(responseData);
+    }
+        catch (error) {
+        next(error); // Pass errors to the error handling middleware
+    }
+};
+
+
+export const getCarById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        // Implement logic to get a car by its ID
+        const paramData:paramsType = req.params!;
+        if (!paramData.id) {
+            throw new AppError("Car ID is required");
+        }
+        //Call service layer to get the car by ID
+        const car = await getCarByIdService(paramData.id);
+        if (!car) {  
+            throw new AppError("Car not found", 404);
+        }
+        //Respond with the car data
+        const responseData: ApiResponse<CarResponse> = {
+            status: 'success',
+            message: 'Car retrieved successfully',
+            data: car
+        };
+        return res.status(200).json(responseData);
+    } catch (error) {
+        next(error); // Pass errors to the error handling middleware
+    }    
+};       
+
+
+export const deleteCar = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        // Implement logic to delete a car by its ID
+        const paramData:paramsType = req.params!;
+        if (!paramData.id) {
+            throw new AppError("Car ID is required");
+        }
+        // Call service layer to delete the car by ID
+        const deletedCar = await deleteCarService(paramData.id);
+        // Respond with a success message
+        const responseData: ApiResponse<CarResponse> = {
+            status: 'success',
+            message: 'Car deleted successfully',
+            data: deletedCar
+        };
+        return res.status(200).json(responseData);
+    } catch (error) {
+        next(error); // Pass errors to the error handling middleware
+    }
+};
+
+
+export const deleteCarImage = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        // Implement logic to delete a car image by its ID
+        const paramData:paramsType = req.params!;
+        if (!paramData.id || !paramData.imgId) {
+            throw new AppError("Car ID and Image ID are required");
+        }
+        // Call service layer to delete the car image by ID
+        await deleteCarImageService(paramData.imgId!);
+        // Respond with a success message
+        const responseData: ApiResponse<null> = {
+            status: 'success',
+            message: 'Car image deleted successfully',
+            data: null
+        };
+        return res.status(200).json(responseData);
+    } catch (error) {
+        next(error); // Pass errors to the error handling middleware
+    }
+};
+
+
+export const updateCarStatus = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        // Implement logic to update a car's status
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorMessages = errors.array().map(err => err.msg);
+            return res.status(400).json({
+              status: "failed",
+              message: errorMessages
+            });
+        }
+        const paramData:paramsType = req.params!;
+        if (!paramData.id) {
+            throw new AppError("Car ID is required");
+        }
+        const { status } = req.body;
+        if (!status) {
+            throw new AppError("Car status is required");
+        }
+        // Call service layer to update the car's status
+        const updatedCar = await updateCarStatusService(paramData.id, status);
+        // Respond with the updated car data
+        const responseData: ApiResponse<CarResponse> = {
+            status: 'success',
+            message: 'Car status updated successfully',
+            data: updatedCar
+        };
+        return res.status(200).json(responseData);
+    } catch (error) {
+        next(error); // Pass errors to the error handling middleware
+    }
+};
 // Additional controller functions (e.g., getCarById, updateCar, deleteCar) can be implemented similarly

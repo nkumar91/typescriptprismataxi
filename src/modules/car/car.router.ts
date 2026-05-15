@@ -3,7 +3,7 @@ import * as CarController  from './car.controller.js';
 import { vendorAuth } from '../../middleware/vendor.middleware.js';
 import { createLimiter } from '../../middleware/ratelimit.middleware.js';
 import { cloud } from './car.middleware.js';
-import { validateCreateCarInput } from './car.validator.js';
+import { carUpdateStatusValidation, validateCreateCarInput } from './car.validator.js';
 
 const carRouter = express.Router();
 
@@ -13,15 +13,15 @@ carRouter.get(
 CarController.getAllCars
 );
 
-// carRouter.get(
-// '/:id', 
-// CarController.getCarById
-// );
+carRouter.get(
+'/:id', 
+CarController.getCarById
+);
 
-// carRouter.get(
-// '/:id/availability', 
-// CarController.getCarAvailability
-// );
+carRouter.get(
+'/:id/availability', 
+CarController.getCarAvailability
+);
 
 // carRouter.get(
 // '/city/:cityId', 
@@ -40,10 +40,11 @@ carRouter.post(
 // carRouter.put('/:id', CarController.updateCar);
 
 // Admin routes (protected by authentication and admin authorization middleware)
-// carRouter.delete(
-// '/:id', 
-// CarController.deleteCar
-// );
+carRouter.delete(
+'/:id', 
+//adminAuth, // Uncomment this line when admin authentication middleware is implemented
+CarController.deleteCar
+);
 
 
 // Vendor/Admin routes (protected by authentication middleware)
@@ -58,15 +59,18 @@ cloud.fields([
 CarController.uploadCarImage
 );
 
-// carRouter.delete(
-// '/:id/images/:imgId', 
-// CarController.deleteCarImage
-// );
+carRouter.delete(
+'/:id/images/:imgId', 
+vendorAuth,
+CarController.deleteCarImage
+);
 
-// carRouter.patch(
-// '/:id/status', 
-// CarController.updateCarStatus
-// );
+carRouter.patch(
+'/:id/status', 
+vendorAuth,
+carUpdateStatusValidation,
+CarController.updateCarStatus
+);
 
 
 
