@@ -13,7 +13,6 @@ export const validateCreateCarInput:ValidationChain[] = [
     body('price_per_day').isFloat({ min: 0 }).withMessage('Price per day must be a non-negative number'),
     body('security_deposit').isFloat({ min: 0 }).withMessage('Security deposit must be a non-negative number'),
     body('status').isIn(['available', 'booked', 'maintenance', 'inactive']).withMessage('Status must be one of: available, booked, maintenance, inactive'),
-    body('color').isString().withMessage('Color must be a string'),
     body('features').optional().isObject().withMessage('Features must be an object'),
     body('description').optional().isString().withMessage('Description must be a string'),
     body('mileage').optional().isFloat({ min: 0 }).withMessage('Mileage must be a non-negative number'),

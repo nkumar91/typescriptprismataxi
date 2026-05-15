@@ -1,10 +1,13 @@
 import { Response, NextFunction ,Request} from 'express';
 import { CarImageResponse, CarResponse, CreateCarInput, paramsType } from './car.types.js';
-import { createCarService, uploadCarImageService } from './car.service.js';
+import { createCarService, getAllCarsService, uploadCarImageService } from './car.service.js';
 import { ApiResponse } from '../../utils/types.js';
-import { handleHttpRequestInput, uploadToCloudinary } from '../../utils/utils.js';
+import {uploadToCloudinary } from '../../utils/utils.js';
 import { AppError } from '../../utils/error.js';
 import { RequestWithUser } from '../../middleware/vendor.middleware.js';
+import { validationResult } from 'express-validator';
+import { env } from '../../config/env.js';
+
 
 // Controller function to create a new car
 export const createCar = async (
@@ -14,7 +17,14 @@ export const createCar = async (
 ) => {
     try {
         // Validate input data here (e.g., using a validation library)
-        await handleHttpRequestInput(req, res);
+         const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+            const errorMessages = errors.array().map(err => err.msg);
+            return res.status(400).json({
+              status: "failed",
+              message: errorMessages
+            });
+          }
         const carData: CreateCarInput = req.body;
         const { vendorId } = req.user!;
         // Call service layer to create the car
@@ -81,4 +91,26 @@ export const uploadCarImage = async (
     }
 };
 
-// Additional controller functions (e.g., getAllCars, getCarById, updateCar, deleteCar) would be implemented similarly, following the same pattern of input validation, service layer interaction, and error handling.
+
+export const getAllCars = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        // Call service layer to get all cars
+        const limit = Number(env.PAGE_LIMIT || 20); // Default to 20 if not set in environment variables
+        const cars = await getAllCarsService(limit); // Default to 20 cars
+        // Respond with the list of cars
+        const responseData: ApiResponse<CarResponse[]> = {
+            status: 'success',
+            message: 'Cars retrieved successfully',
+            data: cars
+        };
+        return res.status(200).json(responseData);
+    } catch (error) {
+        next(error); // Pass errors to the error handling middleware
+    }
+};
+
+// Additional controller functions (e.g., getCarById, updateCar, deleteCar) can be implemented similarly

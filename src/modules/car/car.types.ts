@@ -74,7 +74,7 @@ export type CarResponse = {
     created_at?: Date | null;
     updated_at?: Date | null;
     deleted_at?: Date | null;
-    images?: CarImageResponse[];
+    car_image?: CarImageResponse[];
 };
 
 

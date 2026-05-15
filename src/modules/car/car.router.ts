@@ -2,14 +2,16 @@ import express from 'express';
 import * as CarController  from './car.controller.js';
 import { vendorAuth } from '../../middleware/vendor.middleware.js';
 import { createLimiter } from '../../middleware/ratelimit.middleware.js';
-import { cloud } from '../user/user.middleware.js';
+import { cloud } from './car.middleware.js';
+import { validateCreateCarInput } from './car.validator.js';
+
 const carRouter = express.Router();
 
 //Public routes
-// carRouter.get(
-// '/', 
-// CarController.getAllCars
-// );
+carRouter.get(
+'/',
+CarController.getAllCars
+);
 
 // carRouter.get(
 // '/:id', 
@@ -31,6 +33,7 @@ const carRouter = express.Router();
 carRouter.post(
     '/',
     createLimiter(1, 30), // Limit to 30 requests per minute for car creation
+    validateCreateCarInput, // Validation middleware for car creation input
     vendorAuth, 
     CarController.createCar
 );

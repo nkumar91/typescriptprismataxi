@@ -1,3 +1,4 @@
+
 import { prisma } from "../../config/db.js";
 import { Prisma } from "../../generated/prisma/client.js";
 import { CarCreateInput } from "../../generated/prisma/models.js";
@@ -87,6 +88,24 @@ export const uploadCarImageService = async (
    
     return uploadedUrl;
 }
+
+
+export const getAllCarsService = async (limit: number): Promise<CarResponse[]> => {// Default to 20 if not set in environment variables
+    const cars = await prisma.car.findMany({
+        include: {
+            car_image: true,
+        },
+        take: limit, // Limit the number of cars returned
+    });
+    if(cars.length === 0){
+        throw new AppError("No cars found", 404);
+    }
+    return cars.map(car => ({
+        ...car,
+        features: car.features as CarFeatures,
+    }));
+};
+
 
 
 
