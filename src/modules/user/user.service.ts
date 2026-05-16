@@ -1,6 +1,6 @@
 import {prisma} from "../../config/db.js"
 import { AppError } from "../../utils/error.js";
-import { KYCDocumentType, KyCSubmission } from "./user.types.js";
+import { BookingResponse, KYCDocumentType, KyCSubmission } from "./user.types.js";
 import bcrypt from "bcrypt";
 const SALT_ROUNDS = 10;
 export const getProfile = async (uuid: string) => {
@@ -137,3 +137,35 @@ export const resetPassword = async (uuid: string, newPassword: string) => {
     data: { password: hashedPassword },
   });
 };
+
+
+export const getAllBookingService = async(
+userId:bigint
+):Promise<BookingResponse[]>=>{
+        const bookingData = await prisma.booking.findMany({
+            where:{
+                user_id:userId
+            },include: {
+            car: {
+                include:{
+                    car_image:true
+                }
+            },
+            pickup_location: {
+                include: {
+                    city: true,
+                },
+            },
+            drop_location: {
+                include: {
+                    city: true,
+                },
+            },
+        }
+        });
+        if(!bookingData){
+            throw new AppError("Booking Details not found",404);
+        }
+        return bookingData!
+        
+}

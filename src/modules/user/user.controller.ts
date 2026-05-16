@@ -1,7 +1,7 @@
 import { Response, NextFunction, response } from "express";
 import { RequestWithUser } from "../../middleware/auth.middleware.js";
-import { getKycDetails, getProfile, resetPassword, submitKYCData, updateProfile } from "./user.service.js";
-import { GetProfileResponse, KycStatusResponse, KyCSubmission } from "./user.types.js";
+import { getAllBookingService, getKycDetails, getProfile, resetPassword, submitKYCData, updateProfile } from "./user.service.js";
+import { BookingResponse, GetProfileResponse, KycStatusResponse, KyCSubmission } from "./user.types.js";
 import { ApiResponse } from "../../utils/types.js";
 import { validationResult } from "express-validator";
 import { AppError } from "../../utils/error.js";
@@ -16,7 +16,7 @@ export const getUserProfile = async (
         {
     try {
         const { uuid } = req.user!;
-        const userProfile = await getProfile(uuid);
+        const userProfile = await getProfile(uuid!);
         if (!userProfile) {
             res.status(404).json({ message: "User not found" });
             return;
@@ -41,13 +41,13 @@ export const getUserBookings = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { uuid } = req.user!;
+        const { userId } = req.user!;
         // Implement logic to fetch user bookings here
-        const bookings = []; // Replace with actual bookings data
-        const responseData: ApiResponse<any[]> = {
+        const bookings = await getAllBookingService(userId!)
+        const responseData: ApiResponse<BookingResponse[]> = {
             status: "success",
             message: "User bookings retrieved successfully",
-            // data: bookings
+            data: bookings
         };
         res.json(responseData);
     } catch (error) {
@@ -180,7 +180,7 @@ export const updateUserProfile = async (
         // Implement profile update logic here
         const { uuid } = req.user!;
         const { name, email, mobile } = req.body;
-        const updatedUser = await updateProfile(uuid, name, email, mobile );
+        const updatedUser = await updateProfile(uuid!, name, email, mobile );
         
         res.json({
             status: "success",

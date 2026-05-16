@@ -260,6 +260,10 @@ export type LocationWhereInput = {
   is_active?: Prisma.BoolFilter<"Location"> | boolean
   created_at?: Prisma.DateTimeNullableFilter<"Location"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"Location"> | Date | string | null
+  city?: Prisma.XOR<Prisma.CityScalarRelationFilter, Prisma.CityWhereInput>
+  pickup_bookings?: Prisma.BookingListRelationFilter
+  drop_bookings?: Prisma.BookingListRelationFilter
+  cars?: Prisma.CarListRelationFilter
 }
 
 export type LocationOrderByWithRelationInput = {
@@ -272,6 +276,10 @@ export type LocationOrderByWithRelationInput = {
   is_active?: Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  city?: Prisma.CityOrderByWithRelationInput
+  pickup_bookings?: Prisma.BookingOrderByRelationAggregateInput
+  drop_bookings?: Prisma.BookingOrderByRelationAggregateInput
+  cars?: Prisma.CarOrderByRelationAggregateInput
   _relevance?: Prisma.LocationOrderByRelevanceInput
 }
 
@@ -288,6 +296,10 @@ export type LocationWhereUniqueInput = Prisma.AtLeast<{
   is_active?: Prisma.BoolFilter<"Location"> | boolean
   created_at?: Prisma.DateTimeNullableFilter<"Location"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"Location"> | Date | string | null
+  city?: Prisma.XOR<Prisma.CityScalarRelationFilter, Prisma.CityWhereInput>
+  pickup_bookings?: Prisma.BookingListRelationFilter
+  drop_bookings?: Prisma.BookingListRelationFilter
+  cars?: Prisma.CarListRelationFilter
 }, "id">
 
 export type LocationOrderByWithAggregationInput = {
@@ -324,7 +336,6 @@ export type LocationScalarWhereWithAggregatesInput = {
 
 export type LocationCreateInput = {
   id?: bigint | number
-  city_id: bigint | number
   name: string
   address?: string | null
   lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -332,6 +343,10 @@ export type LocationCreateInput = {
   is_active?: boolean
   created_at?: Date | string | null
   updated_at?: Date | string | null
+  city: Prisma.CityCreateNestedOneWithoutLocationInput
+  pickup_bookings?: Prisma.BookingCreateNestedManyWithoutPickup_locationInput
+  drop_bookings?: Prisma.BookingCreateNestedManyWithoutDrop_locationInput
+  cars?: Prisma.CarCreateNestedManyWithoutLocationInput
 }
 
 export type LocationUncheckedCreateInput = {
@@ -344,11 +359,13 @@ export type LocationUncheckedCreateInput = {
   is_active?: boolean
   created_at?: Date | string | null
   updated_at?: Date | string | null
+  pickup_bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutPickup_locationInput
+  drop_bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutDrop_locationInput
+  cars?: Prisma.CarUncheckedCreateNestedManyWithoutLocationInput
 }
 
 export type LocationUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  city_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -356,6 +373,10 @@ export type LocationUpdateInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.CityUpdateOneRequiredWithoutLocationNestedInput
+  pickup_bookings?: Prisma.BookingUpdateManyWithoutPickup_locationNestedInput
+  drop_bookings?: Prisma.BookingUpdateManyWithoutDrop_locationNestedInput
+  cars?: Prisma.CarUpdateManyWithoutLocationNestedInput
 }
 
 export type LocationUncheckedUpdateInput = {
@@ -368,6 +389,9 @@ export type LocationUncheckedUpdateInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pickup_bookings?: Prisma.BookingUncheckedUpdateManyWithoutPickup_locationNestedInput
+  drop_bookings?: Prisma.BookingUncheckedUpdateManyWithoutDrop_locationNestedInput
+  cars?: Prisma.CarUncheckedUpdateManyWithoutLocationNestedInput
 }
 
 export type LocationCreateManyInput = {
@@ -384,7 +408,6 @@ export type LocationCreateManyInput = {
 
 export type LocationUpdateManyMutationInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  city_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -404,6 +427,26 @@ export type LocationUncheckedUpdateManyInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type LocationScalarRelationFilter = {
+  is?: Prisma.LocationWhereInput
+  isNot?: Prisma.LocationWhereInput
+}
+
+export type LocationNullableScalarRelationFilter = {
+  is?: Prisma.LocationWhereInput | null
+  isNot?: Prisma.LocationWhereInput | null
+}
+
+export type LocationListRelationFilter = {
+  every?: Prisma.LocationWhereInput
+  some?: Prisma.LocationWhereInput
+  none?: Prisma.LocationWhereInput
+}
+
+export type LocationOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type LocationOrderByRelevanceInput = {
@@ -462,6 +505,474 @@ export type LocationSumOrderByAggregateInput = {
   lng?: Prisma.SortOrder
 }
 
+export type LocationCreateNestedOneWithoutPickup_bookingsInput = {
+  create?: Prisma.XOR<Prisma.LocationCreateWithoutPickup_bookingsInput, Prisma.LocationUncheckedCreateWithoutPickup_bookingsInput>
+  connectOrCreate?: Prisma.LocationCreateOrConnectWithoutPickup_bookingsInput
+  connect?: Prisma.LocationWhereUniqueInput
+}
+
+export type LocationCreateNestedOneWithoutDrop_bookingsInput = {
+  create?: Prisma.XOR<Prisma.LocationCreateWithoutDrop_bookingsInput, Prisma.LocationUncheckedCreateWithoutDrop_bookingsInput>
+  connectOrCreate?: Prisma.LocationCreateOrConnectWithoutDrop_bookingsInput
+  connect?: Prisma.LocationWhereUniqueInput
+}
+
+export type LocationUpdateOneRequiredWithoutPickup_bookingsNestedInput = {
+  create?: Prisma.XOR<Prisma.LocationCreateWithoutPickup_bookingsInput, Prisma.LocationUncheckedCreateWithoutPickup_bookingsInput>
+  connectOrCreate?: Prisma.LocationCreateOrConnectWithoutPickup_bookingsInput
+  upsert?: Prisma.LocationUpsertWithoutPickup_bookingsInput
+  connect?: Prisma.LocationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LocationUpdateToOneWithWhereWithoutPickup_bookingsInput, Prisma.LocationUpdateWithoutPickup_bookingsInput>, Prisma.LocationUncheckedUpdateWithoutPickup_bookingsInput>
+}
+
+export type LocationUpdateOneRequiredWithoutDrop_bookingsNestedInput = {
+  create?: Prisma.XOR<Prisma.LocationCreateWithoutDrop_bookingsInput, Prisma.LocationUncheckedCreateWithoutDrop_bookingsInput>
+  connectOrCreate?: Prisma.LocationCreateOrConnectWithoutDrop_bookingsInput
+  upsert?: Prisma.LocationUpsertWithoutDrop_bookingsInput
+  connect?: Prisma.LocationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LocationUpdateToOneWithWhereWithoutDrop_bookingsInput, Prisma.LocationUpdateWithoutDrop_bookingsInput>, Prisma.LocationUncheckedUpdateWithoutDrop_bookingsInput>
+}
+
+export type LocationCreateNestedOneWithoutCarsInput = {
+  create?: Prisma.XOR<Prisma.LocationCreateWithoutCarsInput, Prisma.LocationUncheckedCreateWithoutCarsInput>
+  connectOrCreate?: Prisma.LocationCreateOrConnectWithoutCarsInput
+  connect?: Prisma.LocationWhereUniqueInput
+}
+
+export type LocationUpdateOneWithoutCarsNestedInput = {
+  create?: Prisma.XOR<Prisma.LocationCreateWithoutCarsInput, Prisma.LocationUncheckedCreateWithoutCarsInput>
+  connectOrCreate?: Prisma.LocationCreateOrConnectWithoutCarsInput
+  upsert?: Prisma.LocationUpsertWithoutCarsInput
+  disconnect?: Prisma.LocationWhereInput | boolean
+  delete?: Prisma.LocationWhereInput | boolean
+  connect?: Prisma.LocationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LocationUpdateToOneWithWhereWithoutCarsInput, Prisma.LocationUpdateWithoutCarsInput>, Prisma.LocationUncheckedUpdateWithoutCarsInput>
+}
+
+export type LocationCreateNestedManyWithoutCityInput = {
+  create?: Prisma.XOR<Prisma.LocationCreateWithoutCityInput, Prisma.LocationUncheckedCreateWithoutCityInput> | Prisma.LocationCreateWithoutCityInput[] | Prisma.LocationUncheckedCreateWithoutCityInput[]
+  connectOrCreate?: Prisma.LocationCreateOrConnectWithoutCityInput | Prisma.LocationCreateOrConnectWithoutCityInput[]
+  createMany?: Prisma.LocationCreateManyCityInputEnvelope
+  connect?: Prisma.LocationWhereUniqueInput | Prisma.LocationWhereUniqueInput[]
+}
+
+export type LocationUncheckedCreateNestedManyWithoutCityInput = {
+  create?: Prisma.XOR<Prisma.LocationCreateWithoutCityInput, Prisma.LocationUncheckedCreateWithoutCityInput> | Prisma.LocationCreateWithoutCityInput[] | Prisma.LocationUncheckedCreateWithoutCityInput[]
+  connectOrCreate?: Prisma.LocationCreateOrConnectWithoutCityInput | Prisma.LocationCreateOrConnectWithoutCityInput[]
+  createMany?: Prisma.LocationCreateManyCityInputEnvelope
+  connect?: Prisma.LocationWhereUniqueInput | Prisma.LocationWhereUniqueInput[]
+}
+
+export type LocationUpdateManyWithoutCityNestedInput = {
+  create?: Prisma.XOR<Prisma.LocationCreateWithoutCityInput, Prisma.LocationUncheckedCreateWithoutCityInput> | Prisma.LocationCreateWithoutCityInput[] | Prisma.LocationUncheckedCreateWithoutCityInput[]
+  connectOrCreate?: Prisma.LocationCreateOrConnectWithoutCityInput | Prisma.LocationCreateOrConnectWithoutCityInput[]
+  upsert?: Prisma.LocationUpsertWithWhereUniqueWithoutCityInput | Prisma.LocationUpsertWithWhereUniqueWithoutCityInput[]
+  createMany?: Prisma.LocationCreateManyCityInputEnvelope
+  set?: Prisma.LocationWhereUniqueInput | Prisma.LocationWhereUniqueInput[]
+  disconnect?: Prisma.LocationWhereUniqueInput | Prisma.LocationWhereUniqueInput[]
+  delete?: Prisma.LocationWhereUniqueInput | Prisma.LocationWhereUniqueInput[]
+  connect?: Prisma.LocationWhereUniqueInput | Prisma.LocationWhereUniqueInput[]
+  update?: Prisma.LocationUpdateWithWhereUniqueWithoutCityInput | Prisma.LocationUpdateWithWhereUniqueWithoutCityInput[]
+  updateMany?: Prisma.LocationUpdateManyWithWhereWithoutCityInput | Prisma.LocationUpdateManyWithWhereWithoutCityInput[]
+  deleteMany?: Prisma.LocationScalarWhereInput | Prisma.LocationScalarWhereInput[]
+}
+
+export type LocationUncheckedUpdateManyWithoutCityNestedInput = {
+  create?: Prisma.XOR<Prisma.LocationCreateWithoutCityInput, Prisma.LocationUncheckedCreateWithoutCityInput> | Prisma.LocationCreateWithoutCityInput[] | Prisma.LocationUncheckedCreateWithoutCityInput[]
+  connectOrCreate?: Prisma.LocationCreateOrConnectWithoutCityInput | Prisma.LocationCreateOrConnectWithoutCityInput[]
+  upsert?: Prisma.LocationUpsertWithWhereUniqueWithoutCityInput | Prisma.LocationUpsertWithWhereUniqueWithoutCityInput[]
+  createMany?: Prisma.LocationCreateManyCityInputEnvelope
+  set?: Prisma.LocationWhereUniqueInput | Prisma.LocationWhereUniqueInput[]
+  disconnect?: Prisma.LocationWhereUniqueInput | Prisma.LocationWhereUniqueInput[]
+  delete?: Prisma.LocationWhereUniqueInput | Prisma.LocationWhereUniqueInput[]
+  connect?: Prisma.LocationWhereUniqueInput | Prisma.LocationWhereUniqueInput[]
+  update?: Prisma.LocationUpdateWithWhereUniqueWithoutCityInput | Prisma.LocationUpdateWithWhereUniqueWithoutCityInput[]
+  updateMany?: Prisma.LocationUpdateManyWithWhereWithoutCityInput | Prisma.LocationUpdateManyWithWhereWithoutCityInput[]
+  deleteMany?: Prisma.LocationScalarWhereInput | Prisma.LocationScalarWhereInput[]
+}
+
+export type LocationCreateWithoutPickup_bookingsInput = {
+  id?: bigint | number
+  name: string
+  address?: string | null
+  lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: boolean
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  city: Prisma.CityCreateNestedOneWithoutLocationInput
+  drop_bookings?: Prisma.BookingCreateNestedManyWithoutDrop_locationInput
+  cars?: Prisma.CarCreateNestedManyWithoutLocationInput
+}
+
+export type LocationUncheckedCreateWithoutPickup_bookingsInput = {
+  id?: bigint | number
+  city_id: bigint | number
+  name: string
+  address?: string | null
+  lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: boolean
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  drop_bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutDrop_locationInput
+  cars?: Prisma.CarUncheckedCreateNestedManyWithoutLocationInput
+}
+
+export type LocationCreateOrConnectWithoutPickup_bookingsInput = {
+  where: Prisma.LocationWhereUniqueInput
+  create: Prisma.XOR<Prisma.LocationCreateWithoutPickup_bookingsInput, Prisma.LocationUncheckedCreateWithoutPickup_bookingsInput>
+}
+
+export type LocationCreateWithoutDrop_bookingsInput = {
+  id?: bigint | number
+  name: string
+  address?: string | null
+  lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: boolean
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  city: Prisma.CityCreateNestedOneWithoutLocationInput
+  pickup_bookings?: Prisma.BookingCreateNestedManyWithoutPickup_locationInput
+  cars?: Prisma.CarCreateNestedManyWithoutLocationInput
+}
+
+export type LocationUncheckedCreateWithoutDrop_bookingsInput = {
+  id?: bigint | number
+  city_id: bigint | number
+  name: string
+  address?: string | null
+  lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: boolean
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  pickup_bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutPickup_locationInput
+  cars?: Prisma.CarUncheckedCreateNestedManyWithoutLocationInput
+}
+
+export type LocationCreateOrConnectWithoutDrop_bookingsInput = {
+  where: Prisma.LocationWhereUniqueInput
+  create: Prisma.XOR<Prisma.LocationCreateWithoutDrop_bookingsInput, Prisma.LocationUncheckedCreateWithoutDrop_bookingsInput>
+}
+
+export type LocationUpsertWithoutPickup_bookingsInput = {
+  update: Prisma.XOR<Prisma.LocationUpdateWithoutPickup_bookingsInput, Prisma.LocationUncheckedUpdateWithoutPickup_bookingsInput>
+  create: Prisma.XOR<Prisma.LocationCreateWithoutPickup_bookingsInput, Prisma.LocationUncheckedCreateWithoutPickup_bookingsInput>
+  where?: Prisma.LocationWhereInput
+}
+
+export type LocationUpdateToOneWithWhereWithoutPickup_bookingsInput = {
+  where?: Prisma.LocationWhereInput
+  data: Prisma.XOR<Prisma.LocationUpdateWithoutPickup_bookingsInput, Prisma.LocationUncheckedUpdateWithoutPickup_bookingsInput>
+}
+
+export type LocationUpdateWithoutPickup_bookingsInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.CityUpdateOneRequiredWithoutLocationNestedInput
+  drop_bookings?: Prisma.BookingUpdateManyWithoutDrop_locationNestedInput
+  cars?: Prisma.CarUpdateManyWithoutLocationNestedInput
+}
+
+export type LocationUncheckedUpdateWithoutPickup_bookingsInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  city_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  drop_bookings?: Prisma.BookingUncheckedUpdateManyWithoutDrop_locationNestedInput
+  cars?: Prisma.CarUncheckedUpdateManyWithoutLocationNestedInput
+}
+
+export type LocationUpsertWithoutDrop_bookingsInput = {
+  update: Prisma.XOR<Prisma.LocationUpdateWithoutDrop_bookingsInput, Prisma.LocationUncheckedUpdateWithoutDrop_bookingsInput>
+  create: Prisma.XOR<Prisma.LocationCreateWithoutDrop_bookingsInput, Prisma.LocationUncheckedCreateWithoutDrop_bookingsInput>
+  where?: Prisma.LocationWhereInput
+}
+
+export type LocationUpdateToOneWithWhereWithoutDrop_bookingsInput = {
+  where?: Prisma.LocationWhereInput
+  data: Prisma.XOR<Prisma.LocationUpdateWithoutDrop_bookingsInput, Prisma.LocationUncheckedUpdateWithoutDrop_bookingsInput>
+}
+
+export type LocationUpdateWithoutDrop_bookingsInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.CityUpdateOneRequiredWithoutLocationNestedInput
+  pickup_bookings?: Prisma.BookingUpdateManyWithoutPickup_locationNestedInput
+  cars?: Prisma.CarUpdateManyWithoutLocationNestedInput
+}
+
+export type LocationUncheckedUpdateWithoutDrop_bookingsInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  city_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pickup_bookings?: Prisma.BookingUncheckedUpdateManyWithoutPickup_locationNestedInput
+  cars?: Prisma.CarUncheckedUpdateManyWithoutLocationNestedInput
+}
+
+export type LocationCreateWithoutCarsInput = {
+  id?: bigint | number
+  name: string
+  address?: string | null
+  lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: boolean
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  city: Prisma.CityCreateNestedOneWithoutLocationInput
+  pickup_bookings?: Prisma.BookingCreateNestedManyWithoutPickup_locationInput
+  drop_bookings?: Prisma.BookingCreateNestedManyWithoutDrop_locationInput
+}
+
+export type LocationUncheckedCreateWithoutCarsInput = {
+  id?: bigint | number
+  city_id: bigint | number
+  name: string
+  address?: string | null
+  lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: boolean
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  pickup_bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutPickup_locationInput
+  drop_bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutDrop_locationInput
+}
+
+export type LocationCreateOrConnectWithoutCarsInput = {
+  where: Prisma.LocationWhereUniqueInput
+  create: Prisma.XOR<Prisma.LocationCreateWithoutCarsInput, Prisma.LocationUncheckedCreateWithoutCarsInput>
+}
+
+export type LocationUpsertWithoutCarsInput = {
+  update: Prisma.XOR<Prisma.LocationUpdateWithoutCarsInput, Prisma.LocationUncheckedUpdateWithoutCarsInput>
+  create: Prisma.XOR<Prisma.LocationCreateWithoutCarsInput, Prisma.LocationUncheckedCreateWithoutCarsInput>
+  where?: Prisma.LocationWhereInput
+}
+
+export type LocationUpdateToOneWithWhereWithoutCarsInput = {
+  where?: Prisma.LocationWhereInput
+  data: Prisma.XOR<Prisma.LocationUpdateWithoutCarsInput, Prisma.LocationUncheckedUpdateWithoutCarsInput>
+}
+
+export type LocationUpdateWithoutCarsInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.CityUpdateOneRequiredWithoutLocationNestedInput
+  pickup_bookings?: Prisma.BookingUpdateManyWithoutPickup_locationNestedInput
+  drop_bookings?: Prisma.BookingUpdateManyWithoutDrop_locationNestedInput
+}
+
+export type LocationUncheckedUpdateWithoutCarsInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  city_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pickup_bookings?: Prisma.BookingUncheckedUpdateManyWithoutPickup_locationNestedInput
+  drop_bookings?: Prisma.BookingUncheckedUpdateManyWithoutDrop_locationNestedInput
+}
+
+export type LocationCreateWithoutCityInput = {
+  id?: bigint | number
+  name: string
+  address?: string | null
+  lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: boolean
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  pickup_bookings?: Prisma.BookingCreateNestedManyWithoutPickup_locationInput
+  drop_bookings?: Prisma.BookingCreateNestedManyWithoutDrop_locationInput
+  cars?: Prisma.CarCreateNestedManyWithoutLocationInput
+}
+
+export type LocationUncheckedCreateWithoutCityInput = {
+  id?: bigint | number
+  name: string
+  address?: string | null
+  lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: boolean
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  pickup_bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutPickup_locationInput
+  drop_bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutDrop_locationInput
+  cars?: Prisma.CarUncheckedCreateNestedManyWithoutLocationInput
+}
+
+export type LocationCreateOrConnectWithoutCityInput = {
+  where: Prisma.LocationWhereUniqueInput
+  create: Prisma.XOR<Prisma.LocationCreateWithoutCityInput, Prisma.LocationUncheckedCreateWithoutCityInput>
+}
+
+export type LocationCreateManyCityInputEnvelope = {
+  data: Prisma.LocationCreateManyCityInput | Prisma.LocationCreateManyCityInput[]
+  skipDuplicates?: boolean
+}
+
+export type LocationUpsertWithWhereUniqueWithoutCityInput = {
+  where: Prisma.LocationWhereUniqueInput
+  update: Prisma.XOR<Prisma.LocationUpdateWithoutCityInput, Prisma.LocationUncheckedUpdateWithoutCityInput>
+  create: Prisma.XOR<Prisma.LocationCreateWithoutCityInput, Prisma.LocationUncheckedCreateWithoutCityInput>
+}
+
+export type LocationUpdateWithWhereUniqueWithoutCityInput = {
+  where: Prisma.LocationWhereUniqueInput
+  data: Prisma.XOR<Prisma.LocationUpdateWithoutCityInput, Prisma.LocationUncheckedUpdateWithoutCityInput>
+}
+
+export type LocationUpdateManyWithWhereWithoutCityInput = {
+  where: Prisma.LocationScalarWhereInput
+  data: Prisma.XOR<Prisma.LocationUpdateManyMutationInput, Prisma.LocationUncheckedUpdateManyWithoutCityInput>
+}
+
+export type LocationScalarWhereInput = {
+  AND?: Prisma.LocationScalarWhereInput | Prisma.LocationScalarWhereInput[]
+  OR?: Prisma.LocationScalarWhereInput[]
+  NOT?: Prisma.LocationScalarWhereInput | Prisma.LocationScalarWhereInput[]
+  id?: Prisma.BigIntFilter<"Location"> | bigint | number
+  city_id?: Prisma.BigIntFilter<"Location"> | bigint | number
+  name?: Prisma.StringFilter<"Location"> | string
+  address?: Prisma.StringNullableFilter<"Location"> | string | null
+  lat?: Prisma.DecimalNullableFilter<"Location"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.DecimalNullableFilter<"Location"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: Prisma.BoolFilter<"Location"> | boolean
+  created_at?: Prisma.DateTimeNullableFilter<"Location"> | Date | string | null
+  updated_at?: Prisma.DateTimeNullableFilter<"Location"> | Date | string | null
+}
+
+export type LocationCreateManyCityInput = {
+  id?: bigint | number
+  name: string
+  address?: string | null
+  lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: boolean
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+}
+
+export type LocationUpdateWithoutCityInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pickup_bookings?: Prisma.BookingUpdateManyWithoutPickup_locationNestedInput
+  drop_bookings?: Prisma.BookingUpdateManyWithoutDrop_locationNestedInput
+  cars?: Prisma.CarUpdateManyWithoutLocationNestedInput
+}
+
+export type LocationUncheckedUpdateWithoutCityInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pickup_bookings?: Prisma.BookingUncheckedUpdateManyWithoutPickup_locationNestedInput
+  drop_bookings?: Prisma.BookingUncheckedUpdateManyWithoutDrop_locationNestedInput
+  cars?: Prisma.CarUncheckedUpdateManyWithoutLocationNestedInput
+}
+
+export type LocationUncheckedUpdateManyWithoutCityInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+
+/**
+ * Count Type LocationCountOutputType
+ */
+
+export type LocationCountOutputType = {
+  pickup_bookings: number
+  drop_bookings: number
+  cars: number
+}
+
+export type LocationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  pickup_bookings?: boolean | LocationCountOutputTypeCountPickup_bookingsArgs
+  drop_bookings?: boolean | LocationCountOutputTypeCountDrop_bookingsArgs
+  cars?: boolean | LocationCountOutputTypeCountCarsArgs
+}
+
+/**
+ * LocationCountOutputType without action
+ */
+export type LocationCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LocationCountOutputType
+   */
+  select?: Prisma.LocationCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * LocationCountOutputType without action
+ */
+export type LocationCountOutputTypeCountPickup_bookingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BookingWhereInput
+}
+
+/**
+ * LocationCountOutputType without action
+ */
+export type LocationCountOutputTypeCountDrop_bookingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BookingWhereInput
+}
+
+/**
+ * LocationCountOutputType without action
+ */
+export type LocationCountOutputTypeCountCarsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CarWhereInput
+}
 
 
 export type LocationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -474,6 +985,11 @@ export type LocationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   is_active?: boolean
   created_at?: boolean
   updated_at?: boolean
+  city?: boolean | Prisma.CityDefaultArgs<ExtArgs>
+  pickup_bookings?: boolean | Prisma.Location$pickup_bookingsArgs<ExtArgs>
+  drop_bookings?: boolean | Prisma.Location$drop_bookingsArgs<ExtArgs>
+  cars?: boolean | Prisma.Location$carsArgs<ExtArgs>
+  _count?: boolean | Prisma.LocationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["location"]>
 
 
@@ -491,10 +1007,22 @@ export type LocationSelectScalar = {
 }
 
 export type LocationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "city_id" | "name" | "address" | "lat" | "lng" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["location"]>
+export type LocationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  city?: boolean | Prisma.CityDefaultArgs<ExtArgs>
+  pickup_bookings?: boolean | Prisma.Location$pickup_bookingsArgs<ExtArgs>
+  drop_bookings?: boolean | Prisma.Location$drop_bookingsArgs<ExtArgs>
+  cars?: boolean | Prisma.Location$carsArgs<ExtArgs>
+  _count?: boolean | Prisma.LocationCountOutputTypeDefaultArgs<ExtArgs>
+}
 
 export type $LocationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Location"
-  objects: {}
+  objects: {
+    city: Prisma.$CityPayload<ExtArgs>
+    pickup_bookings: Prisma.$BookingPayload<ExtArgs>[]
+    drop_bookings: Prisma.$BookingPayload<ExtArgs>[]
+    cars: Prisma.$CarPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
     city_id: bigint
@@ -845,6 +1373,10 @@ readonly fields: LocationFieldRefs;
  */
 export interface Prisma__LocationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  city<T extends Prisma.CityDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CityDefaultArgs<ExtArgs>>): Prisma.Prisma__CityClient<runtime.Types.Result.GetResult<Prisma.$CityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  pickup_bookings<T extends Prisma.Location$pickup_bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Location$pickup_bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  drop_bookings<T extends Prisma.Location$drop_bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Location$drop_bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cars<T extends Prisma.Location$carsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Location$carsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CarPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -900,6 +1432,10 @@ export type LocationFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.LocationOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
+  /**
    * Filter, which Location to fetch.
    */
   where: Prisma.LocationWhereUniqueInput
@@ -918,6 +1454,10 @@ export type LocationFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.LocationOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
+  /**
    * Filter, which Location to fetch.
    */
   where: Prisma.LocationWhereUniqueInput
@@ -935,6 +1475,10 @@ export type LocationFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the Location
    */
   omit?: Prisma.LocationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
   /**
    * Filter, which Location to fetch.
    */
@@ -984,6 +1528,10 @@ export type LocationFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.LocationOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
+  /**
    * Filter, which Location to fetch.
    */
   where?: Prisma.LocationWhereInput
@@ -1031,6 +1579,10 @@ export type LocationFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the Location
    */
   omit?: Prisma.LocationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
   /**
    * Filter, which Locations to fetch.
    */
@@ -1080,6 +1632,10 @@ export type LocationCreateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.LocationOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
+  /**
    * The data needed to create a Location.
    */
   data: Prisma.XOR<Prisma.LocationCreateInput, Prisma.LocationUncheckedCreateInput>
@@ -1108,6 +1664,10 @@ export type LocationUpdateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Location
    */
   omit?: Prisma.LocationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
   /**
    * The data needed to update a Location.
    */
@@ -1149,6 +1709,10 @@ export type LocationUpsertArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.LocationOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
+  /**
    * The filter to search for the Location to update in case it exists.
    */
   where: Prisma.LocationWhereUniqueInput
@@ -1175,6 +1739,10 @@ export type LocationDeleteArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.LocationOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
+  /**
    * Filter which Location to delete.
    */
   where: Prisma.LocationWhereUniqueInput
@@ -1195,6 +1763,78 @@ export type LocationDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
+ * Location.pickup_bookings
+ */
+export type Location$pickup_bookingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Booking
+   */
+  select?: Prisma.BookingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Booking
+   */
+  omit?: Prisma.BookingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingInclude<ExtArgs> | null
+  where?: Prisma.BookingWhereInput
+  orderBy?: Prisma.BookingOrderByWithRelationInput | Prisma.BookingOrderByWithRelationInput[]
+  cursor?: Prisma.BookingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BookingScalarFieldEnum | Prisma.BookingScalarFieldEnum[]
+}
+
+/**
+ * Location.drop_bookings
+ */
+export type Location$drop_bookingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Booking
+   */
+  select?: Prisma.BookingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Booking
+   */
+  omit?: Prisma.BookingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingInclude<ExtArgs> | null
+  where?: Prisma.BookingWhereInput
+  orderBy?: Prisma.BookingOrderByWithRelationInput | Prisma.BookingOrderByWithRelationInput[]
+  cursor?: Prisma.BookingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BookingScalarFieldEnum | Prisma.BookingScalarFieldEnum[]
+}
+
+/**
+ * Location.cars
+ */
+export type Location$carsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Car
+   */
+  select?: Prisma.CarSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Car
+   */
+  omit?: Prisma.CarOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CarInclude<ExtArgs> | null
+  where?: Prisma.CarWhereInput
+  orderBy?: Prisma.CarOrderByWithRelationInput | Prisma.CarOrderByWithRelationInput[]
+  cursor?: Prisma.CarWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CarScalarFieldEnum | Prisma.CarScalarFieldEnum[]
+}
+
+/**
  * Location without action
  */
 export type LocationDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1206,4 +1846,8 @@ export type LocationDefaultArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Location
    */
   omit?: Prisma.LocationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
 }

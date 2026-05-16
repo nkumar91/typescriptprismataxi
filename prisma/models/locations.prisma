@@ -1,13 +1,17 @@
 model Location {
-  id         BigInt    @id @default(autoincrement())
-  city_id    BigInt
-  name       String    @db.VarChar(150)
-  address    String?   @db.Text
-  lat        Decimal?  @db.Decimal(10, 7)
-  lng        Decimal?  @db.Decimal(10, 7)
-  is_active  Boolean   @default(true)
-  created_at DateTime?
-  updated_at DateTime?
+  id              BigInt    @id @default(autoincrement())
+  city_id         BigInt
+  city            City      @relation(fields: [city_id], references: [id])
+  name            String    @db.VarChar(150)
+  address         String?   @db.Text
+  lat             Decimal?  @db.Decimal(10, 7)
+  lng             Decimal?  @db.Decimal(10, 7)
+  is_active       Boolean   @default(true)
+  created_at      DateTime?
+  updated_at      DateTime?
+  pickup_bookings Booking[] @relation("PickupLocation")
+  drop_bookings   Booking[] @relation("DropLocation")
+  cars            Car[]
 
   @@index([city_id])
   @@index([is_active])

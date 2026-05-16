@@ -12,19 +12,19 @@ enum TransactionStatus {
 }
 
 model Transaction {
-  id                 BigInt     @id @default(autoincrement())
-  booking_id         BigInt
-  user_id            BigInt
-  razorpay_order_id  String     @unique @db.VarChar(100)
-  razorpay_payment_id String?   @unique @db.VarChar(100)
-  razorpay_signature String?    @db.VarChar(255)
-  amount             Decimal    @db.Decimal(10, 2)
-  currency           String     @db.Char(3) @default("INR")
-  type               TransactionType @default(payment)
-  status             TransactionStatus @default(created)
-  gateway_response   Json?
-  created_at         DateTime?   @default(now())
-  updated_at         DateTime?   @updatedAt
+  id                  BigInt            @id @default(autoincrement())
+  booking_id          BigInt
+  user_id             BigInt
+  razorpay_order_id   String            @unique @db.VarChar(100)
+  razorpay_payment_id String?           @unique @db.VarChar(100)
+  razorpay_signature  String?           @db.VarChar(255)
+  amount              Decimal           @db.Decimal(10, 2)
+  currency            String            @default("INR") @db.Char(3)
+  type                TransactionType   @default(payment)
+  status              TransactionStatus @default(created)
+  gateway_response    Json?
+  created_at          DateTime?         @default(now())
+  updated_at          DateTime?         @updatedAt
 
   @@index([booking_id])
   @@index([user_id])

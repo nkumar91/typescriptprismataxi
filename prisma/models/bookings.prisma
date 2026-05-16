@@ -7,28 +7,32 @@ enum BookingStatus {
 }
 
 model Booking {
-  id                 BigInt    @id @default(autoincrement())
-  booking_number     String    @unique @db.VarChar(20)
-  user_id            BigInt
-  car_id             BigInt
-  pickup_location_id BigInt
-  drop_location_id   BigInt
-  start_date         DateTime
-  end_date           DateTime
-  total_days         Int
-  base_amount        Decimal   @db.Decimal(10, 2)
-  discount_amount    Decimal   @db.Decimal(10, 2) @default(0.00)
-  surge_amount       Decimal   @db.Decimal(10, 2) @default(0.00)
-  tax_amount         Decimal   @db.Decimal(10, 2)
-  total_amount       Decimal   @db.Decimal(10, 2)
-  security_deposit   Decimal   @db.Decimal(10, 2) @default(0.00)
-  coupon_id          BigInt?
-  status             BookingStatus @default(pending)
-  cancellation_reason String?   @db.Text
-  cancelled_at       DateTime?
-  notes              String?   @db.Text
-  created_at         DateTime? @default(now())
-  updated_at         DateTime? @updatedAt
+  id                  BigInt        @id @default(autoincrement())
+  booking_number      String        @unique @db.VarChar(20)
+  user_id             BigInt
+  user                User          @relation(fields: [user_id], references: [id])
+  car_id              BigInt
+  car                 Car           @relation(fields: [car_id], references: [id])
+  pickup_location_id  BigInt
+  pickup_location     Location      @relation("PickupLocation", fields: [pickup_location_id], references: [id])
+  drop_location_id    BigInt
+  drop_location       Location      @relation("DropLocation", fields: [drop_location_id], references: [id])
+  start_date          DateTime
+  end_date            DateTime
+  total_days          Int
+  base_amount         Decimal       @db.Decimal(10, 2)
+  discount_amount     Decimal       @default(0.00) @db.Decimal(10, 2)
+  surge_amount        Decimal       @default(0.00) @db.Decimal(10, 2)
+  tax_amount          Decimal       @db.Decimal(10, 2)
+  total_amount        Decimal       @db.Decimal(10, 2)
+  security_deposit    Decimal       @default(0.00) @db.Decimal(10, 2)
+  coupon_id           BigInt?
+  status              BookingStatus @default(pending)
+  cancellation_reason String?       @db.Text
+  cancelled_at        DateTime?
+  notes               String?       @db.Text
+  created_at          DateTime?     @default(now())
+  updated_at          DateTime?     @updatedAt
 
   @@index([user_id])
   @@index([car_id])

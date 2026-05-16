@@ -4,8 +4,12 @@ import redisClient from '../config/redis.js';
 import { AppError } from '../utils/error.js';
 import { TokenPayload } from '../utils/types.js';
 import { prisma } from '../config/db.js';
+import { env } from '../config/env.js';
+
 
 const APPROVERD_STATUS = 'approved';
+const ADMIN_EMAIL = env.ADMIN_EMAIL! || null;
+const ADMIN_PASSWORD = env.ADMIN_PASSWORD! || null;
 export interface RequestWithUser extends Request {
     user?: TokenPayload;
 }
@@ -16,12 +20,20 @@ export const vendorAuth = async (
 ) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({
+         //Check Admin Auth
+        const {admin_email,admin_password,vendor_id} = req.body!;
+        if(ADMIN_EMAIL===admin_email && ADMIN_PASSWORD ===admin_password){
+             req.user! = {vendorId:vendor_id}
+             return next();
+        }
+        else{
+         return res.status(401).json({
             status: 'failed',
-            message: 'Unauthorized access'
+            message: 'Unauthorized admin access'
         });
     }
-    const token: string = authHeader.split(' ')[1] || '';
+    }
+    const token: string = authHeader?.split(' ')[1] || '';
     try {
         // Verify token and extract payload
         const decoded = verifyJwt<TokenPayload>(token);

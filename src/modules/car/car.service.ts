@@ -1,6 +1,6 @@
 import { prisma } from "../../config/db.js";
 import { Prisma } from "../../generated/prisma/client.js";
-import { CarCreateInput } from "../../generated/prisma/models.js";
+import {CarUncheckedCreateInput } from "../../generated/prisma/models.js";
 import { AppError } from "../../utils/error.js";
 import { 
     CarFeatures, 
@@ -26,7 +26,7 @@ export const createCarService = async (
         throw new AppError("Failed to generate UUID", 500);
     }
 
-    const createData: CarCreateInput = {
+    const createData: CarUncheckedCreateInput = {
         uuid,
         vendor_id: vendorId,
         city_id: carData.city_id,
@@ -185,25 +185,40 @@ export const updateCarStatusService = async (carId: bigint, status: CarStatus): 
 
 // getCarAvailabilityService: check if a specific car is available based on its status
 export const getCarAvailabilityService = async (carId: bigint): Promise<{ available: boolean; status: CarStatus }> => {
-    const AVAILABLE_STATUSES: CarStatus[] = ["available"];
-    const car = await prisma.car.findUnique({
-        where: { id: carId, deleted_at: null }, // Ensure we only check availability for non-deleted cars   
+    const car = await prisma.car.findFirst({
+        where: { id: carId, deleted_at: null,status:"available" }, // Ensure we only check availability for non-deleted cars   
     });
      if (!car) {
         throw new AppError("Car is not found or has been deleted", 404);
     }
-    const isAvailable = AVAILABLE_STATUSES.includes(car.status);
+    const now = new Date();
+    const checkAvailability = await prisma.booking.findFirst({
+        where:{
+            car_id:carId,
+            start_date:{
+                 lte: now,
+            },
+            end_date:{
+                gte:now
+            }
+        }
+    });
+    if(checkAvailability){
+        throw new AppError("Car is not available")
+    }
     return {
-        available: isAvailable,
+        available: true,
         status: car.status,
     };
 }
 
 // getCarsByCityService: retrieve non-deleted cars available in a specific city
 export const getCarsByCityService = async (cityId: bigint): Promise<CarResponse[]> => {
+    const AVAILABLE = "available";
     const cars = await prisma.car.findMany({
         where: {
             city_id: cityId,
+            status:AVAILABLE,
             deleted_at: null, // Only include non-deleted cars
         },
         include: {

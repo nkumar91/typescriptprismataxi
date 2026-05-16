@@ -232,6 +232,8 @@ export type CityWhereInput = {
   is_active?: Prisma.BoolFilter<"City"> | boolean
   created_at?: Prisma.DateTimeNullableFilter<"City"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"City"> | Date | string | null
+  location?: Prisma.LocationListRelationFilter
+  cars?: Prisma.CarListRelationFilter
 }
 
 export type CityOrderByWithRelationInput = {
@@ -242,6 +244,8 @@ export type CityOrderByWithRelationInput = {
   is_active?: Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  location?: Prisma.LocationOrderByRelationAggregateInput
+  cars?: Prisma.CarOrderByRelationAggregateInput
   _relevance?: Prisma.CityOrderByRelevanceInput
 }
 
@@ -256,6 +260,8 @@ export type CityWhereUniqueInput = Prisma.AtLeast<{
   is_active?: Prisma.BoolFilter<"City"> | boolean
   created_at?: Prisma.DateTimeNullableFilter<"City"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"City"> | Date | string | null
+  location?: Prisma.LocationListRelationFilter
+  cars?: Prisma.CarListRelationFilter
 }, "id" | "name">
 
 export type CityOrderByWithAggregationInput = {
@@ -294,6 +300,8 @@ export type CityCreateInput = {
   is_active?: boolean
   created_at?: Date | string | null
   updated_at?: Date | string | null
+  location?: Prisma.LocationCreateNestedManyWithoutCityInput
+  cars?: Prisma.CarCreateNestedManyWithoutCityInput
 }
 
 export type CityUncheckedCreateInput = {
@@ -304,6 +312,8 @@ export type CityUncheckedCreateInput = {
   is_active?: boolean
   created_at?: Date | string | null
   updated_at?: Date | string | null
+  location?: Prisma.LocationUncheckedCreateNestedManyWithoutCityInput
+  cars?: Prisma.CarUncheckedCreateNestedManyWithoutCityInput
 }
 
 export type CityUpdateInput = {
@@ -314,6 +324,8 @@ export type CityUpdateInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  location?: Prisma.LocationUpdateManyWithoutCityNestedInput
+  cars?: Prisma.CarUpdateManyWithoutCityNestedInput
 }
 
 export type CityUncheckedUpdateInput = {
@@ -324,6 +336,8 @@ export type CityUncheckedUpdateInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  location?: Prisma.LocationUncheckedUpdateManyWithoutCityNestedInput
+  cars?: Prisma.CarUncheckedUpdateManyWithoutCityNestedInput
 }
 
 export type CityCreateManyInput = {
@@ -354,6 +368,11 @@ export type CityUncheckedUpdateManyInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type CityScalarRelationFilter = {
+  is?: Prisma.CityWhereInput
+  isNot?: Prisma.CityWhereInput
 }
 
 export type CityOrderByRelevanceInput = {
@@ -400,6 +419,192 @@ export type CitySumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+export type CityCreateNestedOneWithoutCarsInput = {
+  create?: Prisma.XOR<Prisma.CityCreateWithoutCarsInput, Prisma.CityUncheckedCreateWithoutCarsInput>
+  connectOrCreate?: Prisma.CityCreateOrConnectWithoutCarsInput
+  connect?: Prisma.CityWhereUniqueInput
+}
+
+export type CityUpdateOneRequiredWithoutCarsNestedInput = {
+  create?: Prisma.XOR<Prisma.CityCreateWithoutCarsInput, Prisma.CityUncheckedCreateWithoutCarsInput>
+  connectOrCreate?: Prisma.CityCreateOrConnectWithoutCarsInput
+  upsert?: Prisma.CityUpsertWithoutCarsInput
+  connect?: Prisma.CityWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CityUpdateToOneWithWhereWithoutCarsInput, Prisma.CityUpdateWithoutCarsInput>, Prisma.CityUncheckedUpdateWithoutCarsInput>
+}
+
+export type CityCreateNestedOneWithoutLocationInput = {
+  create?: Prisma.XOR<Prisma.CityCreateWithoutLocationInput, Prisma.CityUncheckedCreateWithoutLocationInput>
+  connectOrCreate?: Prisma.CityCreateOrConnectWithoutLocationInput
+  connect?: Prisma.CityWhereUniqueInput
+}
+
+export type CityUpdateOneRequiredWithoutLocationNestedInput = {
+  create?: Prisma.XOR<Prisma.CityCreateWithoutLocationInput, Prisma.CityUncheckedCreateWithoutLocationInput>
+  connectOrCreate?: Prisma.CityCreateOrConnectWithoutLocationInput
+  upsert?: Prisma.CityUpsertWithoutLocationInput
+  connect?: Prisma.CityWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CityUpdateToOneWithWhereWithoutLocationInput, Prisma.CityUpdateWithoutLocationInput>, Prisma.CityUncheckedUpdateWithoutLocationInput>
+}
+
+export type CityCreateWithoutCarsInput = {
+  id?: bigint | number
+  name: string
+  state: string
+  country?: string
+  is_active?: boolean
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  location?: Prisma.LocationCreateNestedManyWithoutCityInput
+}
+
+export type CityUncheckedCreateWithoutCarsInput = {
+  id?: bigint | number
+  name: string
+  state: string
+  country?: string
+  is_active?: boolean
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  location?: Prisma.LocationUncheckedCreateNestedManyWithoutCityInput
+}
+
+export type CityCreateOrConnectWithoutCarsInput = {
+  where: Prisma.CityWhereUniqueInput
+  create: Prisma.XOR<Prisma.CityCreateWithoutCarsInput, Prisma.CityUncheckedCreateWithoutCarsInput>
+}
+
+export type CityUpsertWithoutCarsInput = {
+  update: Prisma.XOR<Prisma.CityUpdateWithoutCarsInput, Prisma.CityUncheckedUpdateWithoutCarsInput>
+  create: Prisma.XOR<Prisma.CityCreateWithoutCarsInput, Prisma.CityUncheckedCreateWithoutCarsInput>
+  where?: Prisma.CityWhereInput
+}
+
+export type CityUpdateToOneWithWhereWithoutCarsInput = {
+  where?: Prisma.CityWhereInput
+  data: Prisma.XOR<Prisma.CityUpdateWithoutCarsInput, Prisma.CityUncheckedUpdateWithoutCarsInput>
+}
+
+export type CityUpdateWithoutCarsInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  location?: Prisma.LocationUpdateManyWithoutCityNestedInput
+}
+
+export type CityUncheckedUpdateWithoutCarsInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  location?: Prisma.LocationUncheckedUpdateManyWithoutCityNestedInput
+}
+
+export type CityCreateWithoutLocationInput = {
+  id?: bigint | number
+  name: string
+  state: string
+  country?: string
+  is_active?: boolean
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  cars?: Prisma.CarCreateNestedManyWithoutCityInput
+}
+
+export type CityUncheckedCreateWithoutLocationInput = {
+  id?: bigint | number
+  name: string
+  state: string
+  country?: string
+  is_active?: boolean
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  cars?: Prisma.CarUncheckedCreateNestedManyWithoutCityInput
+}
+
+export type CityCreateOrConnectWithoutLocationInput = {
+  where: Prisma.CityWhereUniqueInput
+  create: Prisma.XOR<Prisma.CityCreateWithoutLocationInput, Prisma.CityUncheckedCreateWithoutLocationInput>
+}
+
+export type CityUpsertWithoutLocationInput = {
+  update: Prisma.XOR<Prisma.CityUpdateWithoutLocationInput, Prisma.CityUncheckedUpdateWithoutLocationInput>
+  create: Prisma.XOR<Prisma.CityCreateWithoutLocationInput, Prisma.CityUncheckedCreateWithoutLocationInput>
+  where?: Prisma.CityWhereInput
+}
+
+export type CityUpdateToOneWithWhereWithoutLocationInput = {
+  where?: Prisma.CityWhereInput
+  data: Prisma.XOR<Prisma.CityUpdateWithoutLocationInput, Prisma.CityUncheckedUpdateWithoutLocationInput>
+}
+
+export type CityUpdateWithoutLocationInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cars?: Prisma.CarUpdateManyWithoutCityNestedInput
+}
+
+export type CityUncheckedUpdateWithoutLocationInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cars?: Prisma.CarUncheckedUpdateManyWithoutCityNestedInput
+}
+
+
+/**
+ * Count Type CityCountOutputType
+ */
+
+export type CityCountOutputType = {
+  location: number
+  cars: number
+}
+
+export type CityCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  location?: boolean | CityCountOutputTypeCountLocationArgs
+  cars?: boolean | CityCountOutputTypeCountCarsArgs
+}
+
+/**
+ * CityCountOutputType without action
+ */
+export type CityCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CityCountOutputType
+   */
+  select?: Prisma.CityCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * CityCountOutputType without action
+ */
+export type CityCountOutputTypeCountLocationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LocationWhereInput
+}
+
+/**
+ * CityCountOutputType without action
+ */
+export type CityCountOutputTypeCountCarsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CarWhereInput
+}
 
 
 export type CitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -410,6 +615,9 @@ export type CitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   is_active?: boolean
   created_at?: boolean
   updated_at?: boolean
+  location?: boolean | Prisma.City$locationArgs<ExtArgs>
+  cars?: boolean | Prisma.City$carsArgs<ExtArgs>
+  _count?: boolean | Prisma.CityCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["city"]>
 
 
@@ -425,10 +633,18 @@ export type CitySelectScalar = {
 }
 
 export type CityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "state" | "country" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["city"]>
+export type CityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  location?: boolean | Prisma.City$locationArgs<ExtArgs>
+  cars?: boolean | Prisma.City$carsArgs<ExtArgs>
+  _count?: boolean | Prisma.CityCountOutputTypeDefaultArgs<ExtArgs>
+}
 
 export type $CityPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "City"
-  objects: {}
+  objects: {
+    location: Prisma.$LocationPayload<ExtArgs>[]
+    cars: Prisma.$CarPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
     name: string
@@ -777,6 +993,8 @@ readonly fields: CityFieldRefs;
  */
 export interface Prisma__CityClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  location<T extends Prisma.City$locationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.City$locationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cars<T extends Prisma.City$carsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.City$carsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CarPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -830,6 +1048,10 @@ export type CityFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.CityOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CityInclude<ExtArgs> | null
+  /**
    * Filter, which City to fetch.
    */
   where: Prisma.CityWhereUniqueInput
@@ -848,6 +1070,10 @@ export type CityFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.CityOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CityInclude<ExtArgs> | null
+  /**
    * Filter, which City to fetch.
    */
   where: Prisma.CityWhereUniqueInput
@@ -865,6 +1091,10 @@ export type CityFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the City
    */
   omit?: Prisma.CityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CityInclude<ExtArgs> | null
   /**
    * Filter, which City to fetch.
    */
@@ -914,6 +1144,10 @@ export type CityFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.CityOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CityInclude<ExtArgs> | null
+  /**
    * Filter, which City to fetch.
    */
   where?: Prisma.CityWhereInput
@@ -961,6 +1195,10 @@ export type CityFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Omit specific fields from the City
    */
   omit?: Prisma.CityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CityInclude<ExtArgs> | null
   /**
    * Filter, which Cities to fetch.
    */
@@ -1010,6 +1248,10 @@ export type CityCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   omit?: Prisma.CityOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CityInclude<ExtArgs> | null
+  /**
    * The data needed to create a City.
    */
   data: Prisma.XOR<Prisma.CityCreateInput, Prisma.CityUncheckedCreateInput>
@@ -1038,6 +1280,10 @@ export type CityUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    * Omit specific fields from the City
    */
   omit?: Prisma.CityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CityInclude<ExtArgs> | null
   /**
    * The data needed to update a City.
    */
@@ -1079,6 +1325,10 @@ export type CityUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   omit?: Prisma.CityOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CityInclude<ExtArgs> | null
+  /**
    * The filter to search for the City to update in case it exists.
    */
   where: Prisma.CityWhereUniqueInput
@@ -1105,6 +1355,10 @@ export type CityDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   omit?: Prisma.CityOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CityInclude<ExtArgs> | null
+  /**
    * Filter which City to delete.
    */
   where: Prisma.CityWhereUniqueInput
@@ -1125,6 +1379,54 @@ export type CityDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * City.location
+ */
+export type City$locationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Location
+   */
+  select?: Prisma.LocationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Location
+   */
+  omit?: Prisma.LocationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
+  where?: Prisma.LocationWhereInput
+  orderBy?: Prisma.LocationOrderByWithRelationInput | Prisma.LocationOrderByWithRelationInput[]
+  cursor?: Prisma.LocationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LocationScalarFieldEnum | Prisma.LocationScalarFieldEnum[]
+}
+
+/**
+ * City.cars
+ */
+export type City$carsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Car
+   */
+  select?: Prisma.CarSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Car
+   */
+  omit?: Prisma.CarOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CarInclude<ExtArgs> | null
+  where?: Prisma.CarWhereInput
+  orderBy?: Prisma.CarOrderByWithRelationInput | Prisma.CarOrderByWithRelationInput[]
+  cursor?: Prisma.CarWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CarScalarFieldEnum | Prisma.CarScalarFieldEnum[]
+}
+
+/**
  * City without action
  */
 export type CityDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1136,4 +1438,8 @@ export type CityDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    * Omit specific fields from the City
    */
   omit?: Prisma.CityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CityInclude<ExtArgs> | null
 }

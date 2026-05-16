@@ -400,6 +400,10 @@ export type BookingWhereInput = {
   notes?: Prisma.StringNullableFilter<"Booking"> | string | null
   created_at?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  car?: Prisma.XOR<Prisma.CarScalarRelationFilter, Prisma.CarWhereInput>
+  pickup_location?: Prisma.XOR<Prisma.LocationScalarRelationFilter, Prisma.LocationWhereInput>
+  drop_location?: Prisma.XOR<Prisma.LocationScalarRelationFilter, Prisma.LocationWhereInput>
 }
 
 export type BookingOrderByWithRelationInput = {
@@ -425,6 +429,10 @@ export type BookingOrderByWithRelationInput = {
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  user?: Prisma.UserOrderByWithRelationInput
+  car?: Prisma.CarOrderByWithRelationInput
+  pickup_location?: Prisma.LocationOrderByWithRelationInput
+  drop_location?: Prisma.LocationOrderByWithRelationInput
   _relevance?: Prisma.BookingOrderByRelevanceInput
 }
 
@@ -454,6 +462,10 @@ export type BookingWhereUniqueInput = Prisma.AtLeast<{
   notes?: Prisma.StringNullableFilter<"Booking"> | string | null
   created_at?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  car?: Prisma.XOR<Prisma.CarScalarRelationFilter, Prisma.CarWhereInput>
+  pickup_location?: Prisma.XOR<Prisma.LocationScalarRelationFilter, Prisma.LocationWhereInput>
+  drop_location?: Prisma.XOR<Prisma.LocationScalarRelationFilter, Prisma.LocationWhereInput>
 }, "id" | "booking_number">
 
 export type BookingOrderByWithAggregationInput = {
@@ -517,10 +529,6 @@ export type BookingScalarWhereWithAggregatesInput = {
 export type BookingCreateInput = {
   id?: bigint | number
   booking_number: string
-  user_id: bigint | number
-  car_id: bigint | number
-  pickup_location_id: bigint | number
-  drop_location_id: bigint | number
   start_date: Date | string
   end_date: Date | string
   total_days: number
@@ -537,6 +545,10 @@ export type BookingCreateInput = {
   notes?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
+  user: Prisma.UserCreateNestedOneWithoutBookingsInput
+  car: Prisma.CarCreateNestedOneWithoutBookingInput
+  pickup_location: Prisma.LocationCreateNestedOneWithoutPickup_bookingsInput
+  drop_location: Prisma.LocationCreateNestedOneWithoutDrop_bookingsInput
 }
 
 export type BookingUncheckedCreateInput = {
@@ -567,10 +579,6 @@ export type BookingUncheckedCreateInput = {
 export type BookingUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   booking_number?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  car_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  pickup_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  drop_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   start_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   total_days?: Prisma.IntFieldUpdateOperationsInput | number
@@ -587,6 +595,10 @@ export type BookingUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutBookingsNestedInput
+  car?: Prisma.CarUpdateOneRequiredWithoutBookingNestedInput
+  pickup_location?: Prisma.LocationUpdateOneRequiredWithoutPickup_bookingsNestedInput
+  drop_location?: Prisma.LocationUpdateOneRequiredWithoutDrop_bookingsNestedInput
 }
 
 export type BookingUncheckedUpdateInput = {
@@ -642,10 +654,6 @@ export type BookingCreateManyInput = {
 export type BookingUpdateManyMutationInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   booking_number?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  car_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  pickup_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  drop_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   start_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   total_days?: Prisma.IntFieldUpdateOperationsInput | number
@@ -802,6 +810,16 @@ export type BookingSumOrderByAggregateInput = {
   coupon_id?: Prisma.SortOrder
 }
 
+export type BookingListRelationFilter = {
+  every?: Prisma.BookingWhereInput
+  some?: Prisma.BookingWhereInput
+  none?: Prisma.BookingWhereInput
+}
+
+export type BookingOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type BigIntFieldUpdateOperationsInput = {
   set?: bigint | number
   increment?: bigint | number
@@ -838,6 +856,882 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
+export type BookingCreateNestedManyWithoutCarInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutCarInput, Prisma.BookingUncheckedCreateWithoutCarInput> | Prisma.BookingCreateWithoutCarInput[] | Prisma.BookingUncheckedCreateWithoutCarInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutCarInput | Prisma.BookingCreateOrConnectWithoutCarInput[]
+  createMany?: Prisma.BookingCreateManyCarInputEnvelope
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+}
+
+export type BookingUncheckedCreateNestedManyWithoutCarInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutCarInput, Prisma.BookingUncheckedCreateWithoutCarInput> | Prisma.BookingCreateWithoutCarInput[] | Prisma.BookingUncheckedCreateWithoutCarInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutCarInput | Prisma.BookingCreateOrConnectWithoutCarInput[]
+  createMany?: Prisma.BookingCreateManyCarInputEnvelope
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+}
+
+export type BookingUpdateManyWithoutCarNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutCarInput, Prisma.BookingUncheckedCreateWithoutCarInput> | Prisma.BookingCreateWithoutCarInput[] | Prisma.BookingUncheckedCreateWithoutCarInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutCarInput | Prisma.BookingCreateOrConnectWithoutCarInput[]
+  upsert?: Prisma.BookingUpsertWithWhereUniqueWithoutCarInput | Prisma.BookingUpsertWithWhereUniqueWithoutCarInput[]
+  createMany?: Prisma.BookingCreateManyCarInputEnvelope
+  set?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  disconnect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  delete?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  update?: Prisma.BookingUpdateWithWhereUniqueWithoutCarInput | Prisma.BookingUpdateWithWhereUniqueWithoutCarInput[]
+  updateMany?: Prisma.BookingUpdateManyWithWhereWithoutCarInput | Prisma.BookingUpdateManyWithWhereWithoutCarInput[]
+  deleteMany?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[]
+}
+
+export type BookingUncheckedUpdateManyWithoutCarNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutCarInput, Prisma.BookingUncheckedCreateWithoutCarInput> | Prisma.BookingCreateWithoutCarInput[] | Prisma.BookingUncheckedCreateWithoutCarInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutCarInput | Prisma.BookingCreateOrConnectWithoutCarInput[]
+  upsert?: Prisma.BookingUpsertWithWhereUniqueWithoutCarInput | Prisma.BookingUpsertWithWhereUniqueWithoutCarInput[]
+  createMany?: Prisma.BookingCreateManyCarInputEnvelope
+  set?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  disconnect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  delete?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  update?: Prisma.BookingUpdateWithWhereUniqueWithoutCarInput | Prisma.BookingUpdateWithWhereUniqueWithoutCarInput[]
+  updateMany?: Prisma.BookingUpdateManyWithWhereWithoutCarInput | Prisma.BookingUpdateManyWithWhereWithoutCarInput[]
+  deleteMany?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[]
+}
+
+export type BookingCreateNestedManyWithoutPickup_locationInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutPickup_locationInput, Prisma.BookingUncheckedCreateWithoutPickup_locationInput> | Prisma.BookingCreateWithoutPickup_locationInput[] | Prisma.BookingUncheckedCreateWithoutPickup_locationInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutPickup_locationInput | Prisma.BookingCreateOrConnectWithoutPickup_locationInput[]
+  createMany?: Prisma.BookingCreateManyPickup_locationInputEnvelope
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+}
+
+export type BookingCreateNestedManyWithoutDrop_locationInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutDrop_locationInput, Prisma.BookingUncheckedCreateWithoutDrop_locationInput> | Prisma.BookingCreateWithoutDrop_locationInput[] | Prisma.BookingUncheckedCreateWithoutDrop_locationInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutDrop_locationInput | Prisma.BookingCreateOrConnectWithoutDrop_locationInput[]
+  createMany?: Prisma.BookingCreateManyDrop_locationInputEnvelope
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+}
+
+export type BookingUncheckedCreateNestedManyWithoutPickup_locationInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutPickup_locationInput, Prisma.BookingUncheckedCreateWithoutPickup_locationInput> | Prisma.BookingCreateWithoutPickup_locationInput[] | Prisma.BookingUncheckedCreateWithoutPickup_locationInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutPickup_locationInput | Prisma.BookingCreateOrConnectWithoutPickup_locationInput[]
+  createMany?: Prisma.BookingCreateManyPickup_locationInputEnvelope
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+}
+
+export type BookingUncheckedCreateNestedManyWithoutDrop_locationInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutDrop_locationInput, Prisma.BookingUncheckedCreateWithoutDrop_locationInput> | Prisma.BookingCreateWithoutDrop_locationInput[] | Prisma.BookingUncheckedCreateWithoutDrop_locationInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutDrop_locationInput | Prisma.BookingCreateOrConnectWithoutDrop_locationInput[]
+  createMany?: Prisma.BookingCreateManyDrop_locationInputEnvelope
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+}
+
+export type BookingUpdateManyWithoutPickup_locationNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutPickup_locationInput, Prisma.BookingUncheckedCreateWithoutPickup_locationInput> | Prisma.BookingCreateWithoutPickup_locationInput[] | Prisma.BookingUncheckedCreateWithoutPickup_locationInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutPickup_locationInput | Prisma.BookingCreateOrConnectWithoutPickup_locationInput[]
+  upsert?: Prisma.BookingUpsertWithWhereUniqueWithoutPickup_locationInput | Prisma.BookingUpsertWithWhereUniqueWithoutPickup_locationInput[]
+  createMany?: Prisma.BookingCreateManyPickup_locationInputEnvelope
+  set?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  disconnect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  delete?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  update?: Prisma.BookingUpdateWithWhereUniqueWithoutPickup_locationInput | Prisma.BookingUpdateWithWhereUniqueWithoutPickup_locationInput[]
+  updateMany?: Prisma.BookingUpdateManyWithWhereWithoutPickup_locationInput | Prisma.BookingUpdateManyWithWhereWithoutPickup_locationInput[]
+  deleteMany?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[]
+}
+
+export type BookingUpdateManyWithoutDrop_locationNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutDrop_locationInput, Prisma.BookingUncheckedCreateWithoutDrop_locationInput> | Prisma.BookingCreateWithoutDrop_locationInput[] | Prisma.BookingUncheckedCreateWithoutDrop_locationInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutDrop_locationInput | Prisma.BookingCreateOrConnectWithoutDrop_locationInput[]
+  upsert?: Prisma.BookingUpsertWithWhereUniqueWithoutDrop_locationInput | Prisma.BookingUpsertWithWhereUniqueWithoutDrop_locationInput[]
+  createMany?: Prisma.BookingCreateManyDrop_locationInputEnvelope
+  set?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  disconnect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  delete?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  update?: Prisma.BookingUpdateWithWhereUniqueWithoutDrop_locationInput | Prisma.BookingUpdateWithWhereUniqueWithoutDrop_locationInput[]
+  updateMany?: Prisma.BookingUpdateManyWithWhereWithoutDrop_locationInput | Prisma.BookingUpdateManyWithWhereWithoutDrop_locationInput[]
+  deleteMany?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[]
+}
+
+export type BookingUncheckedUpdateManyWithoutPickup_locationNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutPickup_locationInput, Prisma.BookingUncheckedCreateWithoutPickup_locationInput> | Prisma.BookingCreateWithoutPickup_locationInput[] | Prisma.BookingUncheckedCreateWithoutPickup_locationInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutPickup_locationInput | Prisma.BookingCreateOrConnectWithoutPickup_locationInput[]
+  upsert?: Prisma.BookingUpsertWithWhereUniqueWithoutPickup_locationInput | Prisma.BookingUpsertWithWhereUniqueWithoutPickup_locationInput[]
+  createMany?: Prisma.BookingCreateManyPickup_locationInputEnvelope
+  set?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  disconnect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  delete?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  update?: Prisma.BookingUpdateWithWhereUniqueWithoutPickup_locationInput | Prisma.BookingUpdateWithWhereUniqueWithoutPickup_locationInput[]
+  updateMany?: Prisma.BookingUpdateManyWithWhereWithoutPickup_locationInput | Prisma.BookingUpdateManyWithWhereWithoutPickup_locationInput[]
+  deleteMany?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[]
+}
+
+export type BookingUncheckedUpdateManyWithoutDrop_locationNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutDrop_locationInput, Prisma.BookingUncheckedCreateWithoutDrop_locationInput> | Prisma.BookingCreateWithoutDrop_locationInput[] | Prisma.BookingUncheckedCreateWithoutDrop_locationInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutDrop_locationInput | Prisma.BookingCreateOrConnectWithoutDrop_locationInput[]
+  upsert?: Prisma.BookingUpsertWithWhereUniqueWithoutDrop_locationInput | Prisma.BookingUpsertWithWhereUniqueWithoutDrop_locationInput[]
+  createMany?: Prisma.BookingCreateManyDrop_locationInputEnvelope
+  set?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  disconnect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  delete?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  update?: Prisma.BookingUpdateWithWhereUniqueWithoutDrop_locationInput | Prisma.BookingUpdateWithWhereUniqueWithoutDrop_locationInput[]
+  updateMany?: Prisma.BookingUpdateManyWithWhereWithoutDrop_locationInput | Prisma.BookingUpdateManyWithWhereWithoutDrop_locationInput[]
+  deleteMany?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[]
+}
+
+export type BookingCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutUserInput, Prisma.BookingUncheckedCreateWithoutUserInput> | Prisma.BookingCreateWithoutUserInput[] | Prisma.BookingUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutUserInput | Prisma.BookingCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.BookingCreateManyUserInputEnvelope
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+}
+
+export type BookingUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutUserInput, Prisma.BookingUncheckedCreateWithoutUserInput> | Prisma.BookingCreateWithoutUserInput[] | Prisma.BookingUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutUserInput | Prisma.BookingCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.BookingCreateManyUserInputEnvelope
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+}
+
+export type BookingUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutUserInput, Prisma.BookingUncheckedCreateWithoutUserInput> | Prisma.BookingCreateWithoutUserInput[] | Prisma.BookingUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutUserInput | Prisma.BookingCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.BookingUpsertWithWhereUniqueWithoutUserInput | Prisma.BookingUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.BookingCreateManyUserInputEnvelope
+  set?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  disconnect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  delete?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  update?: Prisma.BookingUpdateWithWhereUniqueWithoutUserInput | Prisma.BookingUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.BookingUpdateManyWithWhereWithoutUserInput | Prisma.BookingUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[]
+}
+
+export type BookingUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.BookingCreateWithoutUserInput, Prisma.BookingUncheckedCreateWithoutUserInput> | Prisma.BookingCreateWithoutUserInput[] | Prisma.BookingUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.BookingCreateOrConnectWithoutUserInput | Prisma.BookingCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.BookingUpsertWithWhereUniqueWithoutUserInput | Prisma.BookingUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.BookingCreateManyUserInputEnvelope
+  set?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  disconnect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  delete?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  connect?: Prisma.BookingWhereUniqueInput | Prisma.BookingWhereUniqueInput[]
+  update?: Prisma.BookingUpdateWithWhereUniqueWithoutUserInput | Prisma.BookingUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.BookingUpdateManyWithWhereWithoutUserInput | Prisma.BookingUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[]
+}
+
+export type BookingCreateWithoutCarInput = {
+  id?: bigint | number
+  booking_number: string
+  start_date: Date | string
+  end_date: Date | string
+  total_days: number
+  base_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: bigint | number | null
+  status?: $Enums.BookingStatus
+  cancellation_reason?: string | null
+  cancelled_at?: Date | string | null
+  notes?: string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  user: Prisma.UserCreateNestedOneWithoutBookingsInput
+  pickup_location: Prisma.LocationCreateNestedOneWithoutPickup_bookingsInput
+  drop_location: Prisma.LocationCreateNestedOneWithoutDrop_bookingsInput
+}
+
+export type BookingUncheckedCreateWithoutCarInput = {
+  id?: bigint | number
+  booking_number: string
+  user_id: bigint | number
+  pickup_location_id: bigint | number
+  drop_location_id: bigint | number
+  start_date: Date | string
+  end_date: Date | string
+  total_days: number
+  base_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: bigint | number | null
+  status?: $Enums.BookingStatus
+  cancellation_reason?: string | null
+  cancelled_at?: Date | string | null
+  notes?: string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+}
+
+export type BookingCreateOrConnectWithoutCarInput = {
+  where: Prisma.BookingWhereUniqueInput
+  create: Prisma.XOR<Prisma.BookingCreateWithoutCarInput, Prisma.BookingUncheckedCreateWithoutCarInput>
+}
+
+export type BookingCreateManyCarInputEnvelope = {
+  data: Prisma.BookingCreateManyCarInput | Prisma.BookingCreateManyCarInput[]
+  skipDuplicates?: boolean
+}
+
+export type BookingUpsertWithWhereUniqueWithoutCarInput = {
+  where: Prisma.BookingWhereUniqueInput
+  update: Prisma.XOR<Prisma.BookingUpdateWithoutCarInput, Prisma.BookingUncheckedUpdateWithoutCarInput>
+  create: Prisma.XOR<Prisma.BookingCreateWithoutCarInput, Prisma.BookingUncheckedCreateWithoutCarInput>
+}
+
+export type BookingUpdateWithWhereUniqueWithoutCarInput = {
+  where: Prisma.BookingWhereUniqueInput
+  data: Prisma.XOR<Prisma.BookingUpdateWithoutCarInput, Prisma.BookingUncheckedUpdateWithoutCarInput>
+}
+
+export type BookingUpdateManyWithWhereWithoutCarInput = {
+  where: Prisma.BookingScalarWhereInput
+  data: Prisma.XOR<Prisma.BookingUpdateManyMutationInput, Prisma.BookingUncheckedUpdateManyWithoutCarInput>
+}
+
+export type BookingScalarWhereInput = {
+  AND?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[]
+  OR?: Prisma.BookingScalarWhereInput[]
+  NOT?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[]
+  id?: Prisma.BigIntFilter<"Booking"> | bigint | number
+  booking_number?: Prisma.StringFilter<"Booking"> | string
+  user_id?: Prisma.BigIntFilter<"Booking"> | bigint | number
+  car_id?: Prisma.BigIntFilter<"Booking"> | bigint | number
+  pickup_location_id?: Prisma.BigIntFilter<"Booking"> | bigint | number
+  drop_location_id?: Prisma.BigIntFilter<"Booking"> | bigint | number
+  start_date?: Prisma.DateTimeFilter<"Booking"> | Date | string
+  end_date?: Prisma.DateTimeFilter<"Booking"> | Date | string
+  total_days?: Prisma.IntFilter<"Booking"> | number
+  base_amount?: Prisma.DecimalFilter<"Booking"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: Prisma.DecimalFilter<"Booking"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: Prisma.DecimalFilter<"Booking"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount?: Prisma.DecimalFilter<"Booking"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount?: Prisma.DecimalFilter<"Booking"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: Prisma.DecimalFilter<"Booking"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: Prisma.BigIntNullableFilter<"Booking"> | bigint | number | null
+  status?: Prisma.EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus
+  cancellation_reason?: Prisma.StringNullableFilter<"Booking"> | string | null
+  cancelled_at?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
+  notes?: Prisma.StringNullableFilter<"Booking"> | string | null
+  created_at?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
+  updated_at?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
+}
+
+export type BookingCreateWithoutPickup_locationInput = {
+  id?: bigint | number
+  booking_number: string
+  start_date: Date | string
+  end_date: Date | string
+  total_days: number
+  base_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: bigint | number | null
+  status?: $Enums.BookingStatus
+  cancellation_reason?: string | null
+  cancelled_at?: Date | string | null
+  notes?: string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  user: Prisma.UserCreateNestedOneWithoutBookingsInput
+  car: Prisma.CarCreateNestedOneWithoutBookingInput
+  drop_location: Prisma.LocationCreateNestedOneWithoutDrop_bookingsInput
+}
+
+export type BookingUncheckedCreateWithoutPickup_locationInput = {
+  id?: bigint | number
+  booking_number: string
+  user_id: bigint | number
+  car_id: bigint | number
+  drop_location_id: bigint | number
+  start_date: Date | string
+  end_date: Date | string
+  total_days: number
+  base_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: bigint | number | null
+  status?: $Enums.BookingStatus
+  cancellation_reason?: string | null
+  cancelled_at?: Date | string | null
+  notes?: string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+}
+
+export type BookingCreateOrConnectWithoutPickup_locationInput = {
+  where: Prisma.BookingWhereUniqueInput
+  create: Prisma.XOR<Prisma.BookingCreateWithoutPickup_locationInput, Prisma.BookingUncheckedCreateWithoutPickup_locationInput>
+}
+
+export type BookingCreateManyPickup_locationInputEnvelope = {
+  data: Prisma.BookingCreateManyPickup_locationInput | Prisma.BookingCreateManyPickup_locationInput[]
+  skipDuplicates?: boolean
+}
+
+export type BookingCreateWithoutDrop_locationInput = {
+  id?: bigint | number
+  booking_number: string
+  start_date: Date | string
+  end_date: Date | string
+  total_days: number
+  base_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: bigint | number | null
+  status?: $Enums.BookingStatus
+  cancellation_reason?: string | null
+  cancelled_at?: Date | string | null
+  notes?: string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  user: Prisma.UserCreateNestedOneWithoutBookingsInput
+  car: Prisma.CarCreateNestedOneWithoutBookingInput
+  pickup_location: Prisma.LocationCreateNestedOneWithoutPickup_bookingsInput
+}
+
+export type BookingUncheckedCreateWithoutDrop_locationInput = {
+  id?: bigint | number
+  booking_number: string
+  user_id: bigint | number
+  car_id: bigint | number
+  pickup_location_id: bigint | number
+  start_date: Date | string
+  end_date: Date | string
+  total_days: number
+  base_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: bigint | number | null
+  status?: $Enums.BookingStatus
+  cancellation_reason?: string | null
+  cancelled_at?: Date | string | null
+  notes?: string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+}
+
+export type BookingCreateOrConnectWithoutDrop_locationInput = {
+  where: Prisma.BookingWhereUniqueInput
+  create: Prisma.XOR<Prisma.BookingCreateWithoutDrop_locationInput, Prisma.BookingUncheckedCreateWithoutDrop_locationInput>
+}
+
+export type BookingCreateManyDrop_locationInputEnvelope = {
+  data: Prisma.BookingCreateManyDrop_locationInput | Prisma.BookingCreateManyDrop_locationInput[]
+  skipDuplicates?: boolean
+}
+
+export type BookingUpsertWithWhereUniqueWithoutPickup_locationInput = {
+  where: Prisma.BookingWhereUniqueInput
+  update: Prisma.XOR<Prisma.BookingUpdateWithoutPickup_locationInput, Prisma.BookingUncheckedUpdateWithoutPickup_locationInput>
+  create: Prisma.XOR<Prisma.BookingCreateWithoutPickup_locationInput, Prisma.BookingUncheckedCreateWithoutPickup_locationInput>
+}
+
+export type BookingUpdateWithWhereUniqueWithoutPickup_locationInput = {
+  where: Prisma.BookingWhereUniqueInput
+  data: Prisma.XOR<Prisma.BookingUpdateWithoutPickup_locationInput, Prisma.BookingUncheckedUpdateWithoutPickup_locationInput>
+}
+
+export type BookingUpdateManyWithWhereWithoutPickup_locationInput = {
+  where: Prisma.BookingScalarWhereInput
+  data: Prisma.XOR<Prisma.BookingUpdateManyMutationInput, Prisma.BookingUncheckedUpdateManyWithoutPickup_locationInput>
+}
+
+export type BookingUpsertWithWhereUniqueWithoutDrop_locationInput = {
+  where: Prisma.BookingWhereUniqueInput
+  update: Prisma.XOR<Prisma.BookingUpdateWithoutDrop_locationInput, Prisma.BookingUncheckedUpdateWithoutDrop_locationInput>
+  create: Prisma.XOR<Prisma.BookingCreateWithoutDrop_locationInput, Prisma.BookingUncheckedCreateWithoutDrop_locationInput>
+}
+
+export type BookingUpdateWithWhereUniqueWithoutDrop_locationInput = {
+  where: Prisma.BookingWhereUniqueInput
+  data: Prisma.XOR<Prisma.BookingUpdateWithoutDrop_locationInput, Prisma.BookingUncheckedUpdateWithoutDrop_locationInput>
+}
+
+export type BookingUpdateManyWithWhereWithoutDrop_locationInput = {
+  where: Prisma.BookingScalarWhereInput
+  data: Prisma.XOR<Prisma.BookingUpdateManyMutationInput, Prisma.BookingUncheckedUpdateManyWithoutDrop_locationInput>
+}
+
+export type BookingCreateWithoutUserInput = {
+  id?: bigint | number
+  booking_number: string
+  start_date: Date | string
+  end_date: Date | string
+  total_days: number
+  base_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: bigint | number | null
+  status?: $Enums.BookingStatus
+  cancellation_reason?: string | null
+  cancelled_at?: Date | string | null
+  notes?: string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  car: Prisma.CarCreateNestedOneWithoutBookingInput
+  pickup_location: Prisma.LocationCreateNestedOneWithoutPickup_bookingsInput
+  drop_location: Prisma.LocationCreateNestedOneWithoutDrop_bookingsInput
+}
+
+export type BookingUncheckedCreateWithoutUserInput = {
+  id?: bigint | number
+  booking_number: string
+  car_id: bigint | number
+  pickup_location_id: bigint | number
+  drop_location_id: bigint | number
+  start_date: Date | string
+  end_date: Date | string
+  total_days: number
+  base_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: bigint | number | null
+  status?: $Enums.BookingStatus
+  cancellation_reason?: string | null
+  cancelled_at?: Date | string | null
+  notes?: string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+}
+
+export type BookingCreateOrConnectWithoutUserInput = {
+  where: Prisma.BookingWhereUniqueInput
+  create: Prisma.XOR<Prisma.BookingCreateWithoutUserInput, Prisma.BookingUncheckedCreateWithoutUserInput>
+}
+
+export type BookingCreateManyUserInputEnvelope = {
+  data: Prisma.BookingCreateManyUserInput | Prisma.BookingCreateManyUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type BookingUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.BookingWhereUniqueInput
+  update: Prisma.XOR<Prisma.BookingUpdateWithoutUserInput, Prisma.BookingUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.BookingCreateWithoutUserInput, Prisma.BookingUncheckedCreateWithoutUserInput>
+}
+
+export type BookingUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.BookingWhereUniqueInput
+  data: Prisma.XOR<Prisma.BookingUpdateWithoutUserInput, Prisma.BookingUncheckedUpdateWithoutUserInput>
+}
+
+export type BookingUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.BookingScalarWhereInput
+  data: Prisma.XOR<Prisma.BookingUpdateManyMutationInput, Prisma.BookingUncheckedUpdateManyWithoutUserInput>
+}
+
+export type BookingCreateManyCarInput = {
+  id?: bigint | number
+  booking_number: string
+  user_id: bigint | number
+  pickup_location_id: bigint | number
+  drop_location_id: bigint | number
+  start_date: Date | string
+  end_date: Date | string
+  total_days: number
+  base_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: bigint | number | null
+  status?: $Enums.BookingStatus
+  cancellation_reason?: string | null
+  cancelled_at?: Date | string | null
+  notes?: string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+}
+
+export type BookingUpdateWithoutCarInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  booking_number?: Prisma.StringFieldUpdateOperationsInput | string
+  start_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  total_days?: Prisma.IntFieldUpdateOperationsInput | number
+  base_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  cancellation_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutBookingsNestedInput
+  pickup_location?: Prisma.LocationUpdateOneRequiredWithoutPickup_bookingsNestedInput
+  drop_location?: Prisma.LocationUpdateOneRequiredWithoutDrop_bookingsNestedInput
+}
+
+export type BookingUncheckedUpdateWithoutCarInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  booking_number?: Prisma.StringFieldUpdateOperationsInput | string
+  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  pickup_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  drop_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  start_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  total_days?: Prisma.IntFieldUpdateOperationsInput | number
+  base_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  cancellation_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type BookingUncheckedUpdateManyWithoutCarInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  booking_number?: Prisma.StringFieldUpdateOperationsInput | string
+  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  pickup_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  drop_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  start_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  total_days?: Prisma.IntFieldUpdateOperationsInput | number
+  base_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  cancellation_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type BookingCreateManyPickup_locationInput = {
+  id?: bigint | number
+  booking_number: string
+  user_id: bigint | number
+  car_id: bigint | number
+  drop_location_id: bigint | number
+  start_date: Date | string
+  end_date: Date | string
+  total_days: number
+  base_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: bigint | number | null
+  status?: $Enums.BookingStatus
+  cancellation_reason?: string | null
+  cancelled_at?: Date | string | null
+  notes?: string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+}
+
+export type BookingCreateManyDrop_locationInput = {
+  id?: bigint | number
+  booking_number: string
+  user_id: bigint | number
+  car_id: bigint | number
+  pickup_location_id: bigint | number
+  start_date: Date | string
+  end_date: Date | string
+  total_days: number
+  base_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: bigint | number | null
+  status?: $Enums.BookingStatus
+  cancellation_reason?: string | null
+  cancelled_at?: Date | string | null
+  notes?: string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+}
+
+export type BookingUpdateWithoutPickup_locationInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  booking_number?: Prisma.StringFieldUpdateOperationsInput | string
+  start_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  total_days?: Prisma.IntFieldUpdateOperationsInput | number
+  base_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  cancellation_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutBookingsNestedInput
+  car?: Prisma.CarUpdateOneRequiredWithoutBookingNestedInput
+  drop_location?: Prisma.LocationUpdateOneRequiredWithoutDrop_bookingsNestedInput
+}
+
+export type BookingUncheckedUpdateWithoutPickup_locationInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  booking_number?: Prisma.StringFieldUpdateOperationsInput | string
+  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  car_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  drop_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  start_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  total_days?: Prisma.IntFieldUpdateOperationsInput | number
+  base_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  cancellation_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type BookingUncheckedUpdateManyWithoutPickup_locationInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  booking_number?: Prisma.StringFieldUpdateOperationsInput | string
+  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  car_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  drop_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  start_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  total_days?: Prisma.IntFieldUpdateOperationsInput | number
+  base_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  cancellation_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type BookingUpdateWithoutDrop_locationInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  booking_number?: Prisma.StringFieldUpdateOperationsInput | string
+  start_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  total_days?: Prisma.IntFieldUpdateOperationsInput | number
+  base_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  cancellation_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutBookingsNestedInput
+  car?: Prisma.CarUpdateOneRequiredWithoutBookingNestedInput
+  pickup_location?: Prisma.LocationUpdateOneRequiredWithoutPickup_bookingsNestedInput
+}
+
+export type BookingUncheckedUpdateWithoutDrop_locationInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  booking_number?: Prisma.StringFieldUpdateOperationsInput | string
+  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  car_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  pickup_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  start_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  total_days?: Prisma.IntFieldUpdateOperationsInput | number
+  base_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  cancellation_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type BookingUncheckedUpdateManyWithoutDrop_locationInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  booking_number?: Prisma.StringFieldUpdateOperationsInput | string
+  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  car_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  pickup_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  start_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  total_days?: Prisma.IntFieldUpdateOperationsInput | number
+  base_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  cancellation_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type BookingCreateManyUserInput = {
+  id?: bigint | number
+  booking_number: string
+  car_id: bigint | number
+  pickup_location_id: bigint | number
+  drop_location_id: bigint | number
+  start_date: Date | string
+  end_date: Date | string
+  total_days: number
+  base_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: bigint | number | null
+  status?: $Enums.BookingStatus
+  cancellation_reason?: string | null
+  cancelled_at?: Date | string | null
+  notes?: string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+}
+
+export type BookingUpdateWithoutUserInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  booking_number?: Prisma.StringFieldUpdateOperationsInput | string
+  start_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  total_days?: Prisma.IntFieldUpdateOperationsInput | number
+  base_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  cancellation_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  car?: Prisma.CarUpdateOneRequiredWithoutBookingNestedInput
+  pickup_location?: Prisma.LocationUpdateOneRequiredWithoutPickup_bookingsNestedInput
+  drop_location?: Prisma.LocationUpdateOneRequiredWithoutDrop_bookingsNestedInput
+}
+
+export type BookingUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  booking_number?: Prisma.StringFieldUpdateOperationsInput | string
+  car_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  pickup_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  drop_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  start_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  total_days?: Prisma.IntFieldUpdateOperationsInput | number
+  base_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  cancellation_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type BookingUncheckedUpdateManyWithoutUserInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  booking_number?: Prisma.StringFieldUpdateOperationsInput | string
+  car_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  pickup_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  drop_location_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  start_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  total_days?: Prisma.IntFieldUpdateOperationsInput | number
+  base_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  surge_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tax_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  security_deposit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  coupon_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  cancellation_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelled_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
 
 
 export type BookingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -863,6 +1757,10 @@ export type BookingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   notes?: boolean
   created_at?: boolean
   updated_at?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  car?: boolean | Prisma.CarDefaultArgs<ExtArgs>
+  pickup_location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>
+  drop_location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["booking"]>
 
 
@@ -893,10 +1791,21 @@ export type BookingSelectScalar = {
 }
 
 export type BookingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "booking_number" | "user_id" | "car_id" | "pickup_location_id" | "drop_location_id" | "start_date" | "end_date" | "total_days" | "base_amount" | "discount_amount" | "surge_amount" | "tax_amount" | "total_amount" | "security_deposit" | "coupon_id" | "status" | "cancellation_reason" | "cancelled_at" | "notes" | "created_at" | "updated_at", ExtArgs["result"]["booking"]>
+export type BookingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  car?: boolean | Prisma.CarDefaultArgs<ExtArgs>
+  pickup_location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>
+  drop_location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>
+}
 
 export type $BookingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Booking"
-  objects: {}
+  objects: {
+    user: Prisma.$UserPayload<ExtArgs>
+    car: Prisma.$CarPayload<ExtArgs>
+    pickup_location: Prisma.$LocationPayload<ExtArgs>
+    drop_location: Prisma.$LocationPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
     booking_number: string
@@ -1260,6 +2169,10 @@ readonly fields: BookingFieldRefs;
  */
 export interface Prisma__BookingClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  car<T extends Prisma.CarDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CarDefaultArgs<ExtArgs>>): Prisma.Prisma__CarClient<runtime.Types.Result.GetResult<Prisma.$CarPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  pickup_location<T extends Prisma.LocationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LocationDefaultArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  drop_location<T extends Prisma.LocationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LocationDefaultArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1328,6 +2241,10 @@ export type BookingFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   omit?: Prisma.BookingOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingInclude<ExtArgs> | null
+  /**
    * Filter, which Booking to fetch.
    */
   where: Prisma.BookingWhereUniqueInput
@@ -1346,6 +2263,10 @@ export type BookingFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.BookingOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingInclude<ExtArgs> | null
+  /**
    * Filter, which Booking to fetch.
    */
   where: Prisma.BookingWhereUniqueInput
@@ -1363,6 +2284,10 @@ export type BookingFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the Booking
    */
   omit?: Prisma.BookingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingInclude<ExtArgs> | null
   /**
    * Filter, which Booking to fetch.
    */
@@ -1412,6 +2337,10 @@ export type BookingFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.BookingOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingInclude<ExtArgs> | null
+  /**
    * Filter, which Booking to fetch.
    */
   where?: Prisma.BookingWhereInput
@@ -1459,6 +2388,10 @@ export type BookingFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Booking
    */
   omit?: Prisma.BookingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingInclude<ExtArgs> | null
   /**
    * Filter, which Bookings to fetch.
    */
@@ -1508,6 +2441,10 @@ export type BookingCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.BookingOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingInclude<ExtArgs> | null
+  /**
    * The data needed to create a Booking.
    */
   data: Prisma.XOR<Prisma.BookingCreateInput, Prisma.BookingUncheckedCreateInput>
@@ -1536,6 +2473,10 @@ export type BookingUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Booking
    */
   omit?: Prisma.BookingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingInclude<ExtArgs> | null
   /**
    * The data needed to update a Booking.
    */
@@ -1577,6 +2518,10 @@ export type BookingUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.BookingOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingInclude<ExtArgs> | null
+  /**
    * The filter to search for the Booking to update in case it exists.
    */
   where: Prisma.BookingWhereUniqueInput
@@ -1602,6 +2547,10 @@ export type BookingDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Booking
    */
   omit?: Prisma.BookingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingInclude<ExtArgs> | null
   /**
    * Filter which Booking to delete.
    */
@@ -1634,4 +2583,8 @@ export type BookingDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Booking
    */
   omit?: Prisma.BookingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingInclude<ExtArgs> | null
 }

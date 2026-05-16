@@ -4,20 +4,20 @@ enum CouponType {
 }
 
 model Coupon {
-  id              BigInt   @id @default(autoincrement())
-  code            String   @unique @db.VarChar(20)
-  type            CouponType @default(percentage)
-  value           Decimal  @db.Decimal(10, 2)
-  max_discount    Decimal? @db.Decimal(10, 2)
-  min_booking_amount Decimal @db.Decimal(10, 2) @default(0.00)
-  usage_limit     Int?     @default(0)
-  used_count      Int      @default(0)
-  user_limit      Int      @default(1)
-  valid_from      DateTime
-  valid_until     DateTime
-  is_active       Boolean  @default(true)
-  created_at      DateTime? @default(now())
-  updated_at      DateTime? @updatedAt
+  id                 BigInt     @id @default(autoincrement())
+  code               String     @unique @db.VarChar(20)
+  type               CouponType @default(percentage)
+  value              Decimal    @db.Decimal(10, 2)
+  max_discount       Decimal?   @db.Decimal(10, 2)
+  min_booking_amount Decimal    @default(0.00) @db.Decimal(10, 2)
+  usage_limit        Int?       @default(0)
+  used_count         Int        @default(0)
+  user_limit         Int        @default(1)
+  valid_from         DateTime
+  valid_until        DateTime
+  is_active          Boolean    @default(true)
+  created_at         DateTime?  @default(now())
+  updated_at         DateTime?  @updatedAt
 
   @@index([valid_from])
   @@index([valid_until])
