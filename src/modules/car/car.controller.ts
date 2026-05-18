@@ -148,12 +148,16 @@ export const getAllCars = async (
     try {
         // Call service layer to get all cars
         const limit = Number(env.PAGE_LIMIT || 20); // Default to 20 if not set in environment variables
-        const cars = await getAllCarsService(limit); // Default to 20 cars
+        const page = Number(req.query.page_no) || 1;
+        const {totalPages,currentPage,page_size,data} = await getAllCarsService(limit,page); // Default to 20 cars
         // Respond with the list of cars
         const responseData: ApiResponse<CarResponse[]> = {
             status: 'success',
             message: 'Cars retrieved successfully',
-            data: cars
+            total_page:totalPages,
+            current_page:currentPage,
+            page_size:page_size,
+            data: data
         };
         return res.status(200).json(responseData);
     } catch (error) {

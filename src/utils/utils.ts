@@ -43,3 +43,15 @@ export const generateBookingNumber = () => {
   const random = Math.floor(1000 + Math.random() * 9000);
   return `${prefix}-${timestamp}-${random}`;
 };
+
+
+export const calculateTotalDays = (
+  start_date: Date,
+  end_date: Date
+) => {
+  const diffTime = end_date.getTime() - start_date.getTime();
+  const totalDays = Math.ceil(
+    diffTime / (1000 * 60 * 60 * 24)
+  );
+  return totalDays;
+}

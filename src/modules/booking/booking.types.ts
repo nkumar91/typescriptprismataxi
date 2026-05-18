@@ -8,8 +8,8 @@ export type CreateBookingInput = {
 	car_id: bigint;
 	pickup_location_id: bigint;
 	drop_location_id: bigint;
-	start_date: Date | string;
-	end_date: Date | string;
+	start_date: Date;
+	end_date: Date;
 	total_days: number;
 	base_amount: Prisma.Decimal;
 	discount_amount?: Prisma.Decimal;
@@ -49,7 +49,7 @@ export type UserDetails={
 }
 
 export type CancelBooking = {
-    cancellation_reason?:string | null
+    cancellation_reason?:string | null,
 }
 
 

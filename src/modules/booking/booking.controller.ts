@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import { BookingParams, BookingResponse, CancelBooking, CreateBookingInput } from './booking.types.js';
 import { RequestWithUser } from '../../middleware/auth.middleware.js';
-import { cancelBookingService, createNewBookingService, getBookingDetailsService } from './booking.service.js';
+import { cancelBookingService, createNewBookingService, extendBookingService, getBookingDetailsService } from './booking.service.js';
 import { AppError } from '../../utils/error.js';
 import { ApiResponse } from '../../utils/types.js';
 
@@ -84,22 +84,55 @@ export const cancelBooking = async (
                 message: errorMessages
             });
         }
-        const {userId} = req.user!;
-        const cancelData:CancelBooking = req.body!;
+        const { userId } = req.user!;
+        const cancelData: CancelBooking = req.body!;
         const bookingParams: BookingParams = req.params!;
         const result = await cancelBookingService(
             bookingParams.id!,
             userId!,
             cancelData!
         );
-        const bookingResponse:ApiResponse<BookingResponse> = {
+        const bookingResponse: ApiResponse<BookingResponse> = {
             status: "success",
             message: "Booking cancelled successfully",
             data: result,
         }
-        return res.status(200).json(bookingResponse);  
+        return res.status(200).json(bookingResponse);
     }
     catch (err) {
         next(err)
+    }
+}
+
+
+export const extendsBookingController = async (
+    req: RequestWithUser,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorMessages = errors.array().map(err => err.msg);
+            return res.status(400).json({
+                status: "failed",
+                message: errorMessages
+            });
+        }
+        const { userId } = req.user!;
+        const bookingParams: BookingParams = req.params!;
+        const {new_date} = req.body!;
+        const bookingData = await extendBookingService(userId!,bookingParams.id!,new_date)
+        const bookingResponse:ApiResponse<BookingResponse> = {
+            status:"success",
+            message:"Booking extends successfully",
+            data:bookingData
+        }
+        return res.status(201).json(bookingResponse);
+
+
+
+    } catch (err) {
+        next(err);
     }
 }

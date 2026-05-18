@@ -6,6 +6,7 @@ import {
     cancelValidation,
     createBookingValidation ,
     paramsValidation,
+    paramsWithDateValidation,
 } from './booking.validator.js';
 
 const bookingsRouter = express.Router();
@@ -36,8 +37,9 @@ bookingsRouter.get(
 );
 bookingsRouter.patch(
     "/:id/extend",
-    paramsValidation,
+    paramsWithDateValidation,
     createLimiter(1, 10),
+    BookingController.extendsBookingController
 );
 
 export default bookingsRouter;
