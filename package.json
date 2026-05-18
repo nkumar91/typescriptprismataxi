@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "dev": "npm run lint && tsx watch src/index.ts",
-    "dev:watch": "tsx watch src/index.ts",
+    "dev:watch": "tsx --watch src/index.ts",
     "build": "npm run lint && tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

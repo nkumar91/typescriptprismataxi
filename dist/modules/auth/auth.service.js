@@ -24,29 +24,31 @@ export const registerUser = async (data) => {
     if (data.password) {
         data.password = await bcrypt.hash(data.password, SALT_ROUNDS);
     }
+    // Generate UUID for the new user
     const uuid = randomUUID();
     if (!uuid) {
         throw new AppError("Failed to generate UUID", 500);
     }
     data.uuid = uuid;
+    // Create the user in the database
     return prisma.user.create({
         data: {
             ...data,
-            status: "pending",
+            status: "active", // Set default status to active, you can change this as per your requirements
             kyc_status: "not_submitted",
         },
     });
 };
 export const loginUser = async (data) => {
     const user = await prisma.user.findUnique({
-        where: { email: data.email },
+        where: { email: data.email, deleted_at: null },
     });
     if (!user || !user.password) {
-        throw new AppError("Invalid email", 401);
+        throw new AppError("Invalid email or account has been deleted", 401);
     }
-    // if(user.status !== "active") {
-    //   throw new AppError("User account is not active verification required", 403);
-    // }
+    if (user.status !== "active") {
+        throw new AppError("User account is not active verification required", 403);
+    }
     const isValidPassword = await bcrypt.compare(data.password, user.password);
     if (!isValidPassword) {
         throw new AppError("Invalid password", 401);
@@ -56,7 +58,7 @@ export const loginUser = async (data) => {
         userId: user.id,
         uuid: user.uuid,
         email: user.email,
-        type: "login_access",
+        type: "user_auth",
     });
     return { user, token };
 };

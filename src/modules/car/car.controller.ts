@@ -15,14 +15,14 @@ import {
 import { ApiResponse } from '../../utils/types.js';
 import { uploadToCloudinary } from '../../utils/utils.js';
 import { AppError } from '../../utils/error.js';
-import { RequestWithUser } from '../../middleware/vendor.middleware.js';
+import { RequestWithVendor } from '../../middleware/vendor.middleware.js';
 import { validationResult } from 'express-validator';
 import { env } from '../../config/env.js';
 
 
 // Controller function to create a new car
 export const createCar = async (
-    req: RequestWithUser,
+    req: RequestWithVendor,
     res: Response,
     next: NextFunction
 ) => {
@@ -57,7 +57,7 @@ export const createCar = async (
 };
 
 export const updateCar = async (
-    req: RequestWithUser,
+    req: RequestWithVendor,
     res: Response,
     next: NextFunction
 ) => {

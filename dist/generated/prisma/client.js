@@ -24,8 +24,8 @@ export * from "./enums.js";
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Bookings
- * const bookings = await prisma.booking.findMany()
+ * // Fetch zero or more Admins
+ * const admins = await prisma.admin.findMany()
  * ```
  *
  * Read more in our [docs](https://pris.ly/d/client).

@@ -39,6 +39,7 @@ export const JsonNull = runtime.JsonNull;
  */
 export const AnyNull = runtime.AnyNull;
 export const ModelName = {
+    Admin: 'Admin',
     Booking: 'Booking',
     CarImage: 'CarImage',
     Car: 'Car',
@@ -61,6 +62,12 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
     RepeatableRead: 'RepeatableRead',
     Serializable: 'Serializable'
 });
+export const AdminScalarFieldEnum = {
+    id: 'id',
+    name: 'name',
+    email: 'email',
+    password: 'password'
+};
 export const BookingScalarFieldEnum = {
     id: 'id',
     booking_number: 'booking_number',
@@ -244,6 +251,11 @@ export const NullableJsonNullValueInput = {
 export const NullsOrder = {
     first: 'first',
     last: 'last'
+};
+export const AdminOrderByRelevanceFieldEnum = {
+    name: 'name',
+    email: 'email',
+    password: 'password'
 };
 export const BookingOrderByRelevanceFieldEnum = {
     booking_number: 'booking_number',

@@ -8,6 +8,7 @@ export const signJwt = (payload, expiresIn) => {
         return jwt.sign(payload, secret, { expiresIn: expiresIn || JWT_EXPIRE });
     }
     catch (err) {
+        console.error('JWT signing failed:', err);
         return null;
     }
 };
@@ -17,6 +18,7 @@ export const generateToken = (payload, expiresIn) => {
         return jwt.sign(payload, secret, { expiresIn: expiresIn || JWT_EXPIRE });
     }
     catch (err) {
+        console.error('JWT signing failed:', err);
         return null;
     }
 };

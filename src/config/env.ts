@@ -21,7 +21,8 @@ const envSchema = z.object({
   ADMIN_EMAIL:z.string().default(""),
   ADMIN_PASSWORD:z.string().default(""),
   GST_PER:z.string().default("18"),
-  SURGE_PER:z.string().default("0.20")
+  SURGE_PER:z.string().default("0.20"),
+  PLATFORM_FEE:z.string().default("20"),
 });
 
 export const env = envSchema.parse(process.env);

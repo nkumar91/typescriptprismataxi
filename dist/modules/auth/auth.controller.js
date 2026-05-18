@@ -145,7 +145,7 @@ export const verifyMobileController = async (req, res, next) => {
     }
 };
 // Logout controller
-export const logout = async (req, res, next) => {
+export const logout = async (req, res) => {
     try {
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {

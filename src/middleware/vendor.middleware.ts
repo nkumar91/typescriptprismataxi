@@ -10,11 +10,11 @@ import { env } from '../config/env.js';
 const APPROVERD_STATUS = 'approved';
 const ADMIN_EMAIL = env.ADMIN_EMAIL! || null;
 const ADMIN_PASSWORD = env.ADMIN_PASSWORD! || null;
-export interface RequestWithUser extends Request {
+export interface RequestWithVendor extends Request {
     user?: TokenPayload;
 }
 export const vendorAuth = async (
-    req: RequestWithUser,
+    req: RequestWithVendor,
     res: Response, next:
         NextFunction
 ) => {
