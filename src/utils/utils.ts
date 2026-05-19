@@ -1,6 +1,10 @@
 import { validationResult } from "express-validator";
 import cloudinary from "../config/cloudinary.js";
 import { Request, Response } from "express";
+import { PutObjectCommand,DeleteObjectCommand } from "@aws-sdk/client-s3";
+import crypto from "crypto";
+import { env } from "../config/env.js";
+import { s3 } from "../config/s3.js";
 
 export const uploadToCloudinary = (
   fileBuffer: Buffer,
@@ -55,3 +59,35 @@ export const calculateTotalDays = (
   );
   return totalDays;
 }
+
+
+export const uploadToS3 = async (
+  fileBuffer: Buffer,
+  fileName: string,
+  mimetype: string,
+  folder: string
+): Promise<string> => {
+  const uniqueFileName =
+    `${folder}/${crypto.randomUUID()}-${fileName}`;
+  // new PutObjectCommand()
+  // new DeleteObjectCommand()
+  // new GetObjectCommand()
+  const command = new PutObjectCommand({
+    Bucket: env.AWS_S3_BUCKET!,
+    Key: uniqueFileName,
+    Body: fileBuffer,
+    ContentType: mimetype,
+  });
+  await s3.send(command);
+  return `https://${env.AWS_S3_BUCKET}.s3.${env.AWS_REGION}.amazonaws.com/${uniqueFileName}`;
+};
+export const deleteFromS3 = async (
+    key: string
+): Promise<void> => {
+    const command =
+        new DeleteObjectCommand({
+            Bucket: env.AWS_S3_BUCKET,
+            Key: key,
+        });
+    await s3.send(command);
+};

@@ -23,7 +23,11 @@ const envSchema = z.object({
   GST_PER:z.string().default("18"),
   SURGE_PER:z.string().default("0.20"),
   PLATFORM_FEE:z.string().default("20"),
-  CURRENCY:z.string().default("INR")
+  CURRENCY:z.string().default("INR"),
+  AWS_REGION:z.string(""),
+  AWS_ACCESS_KEY_ID:z.string(""),
+  AWS_SECRET_ACCESS_KEY:z.string(""),
+  AWS_S3_BUCKET:z.string().default("")
 });
 
 export const env = envSchema.parse(process.env);
