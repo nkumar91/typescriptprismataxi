@@ -1,9 +1,9 @@
-import express from "express";
-const authRouter = express.Router();
+import {Router} from "express";
 import * as authController from "./auth.controller.js";
 import { loginValidation, signupValidation } from "./auth.validator.js";
 import { createLimiter } from "../../middleware/ratelimit.middleware.js";
 import { requireAuth } from "../../middleware/auth.middleware.js";
+const authRouter = Router();
 authRouter.post(
     "/register", 
     createLimiter(1, 10), // Limit to 10 requests per 1 minute for registration

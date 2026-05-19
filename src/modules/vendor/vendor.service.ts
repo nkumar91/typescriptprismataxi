@@ -46,7 +46,6 @@ export const createNewVendorService = async (
         bank_account: newVendor.bank_account as BankAccountDetails,
     };
 }
-
 export const getProfileAvaialable = async (
     vendorId: bigint
 ): Promise<VendorResponse> => {
@@ -64,7 +63,6 @@ export const getProfileAvaialable = async (
         bank_account: getProfile.bank_account as BankAccountDetails,
     }
 }
-
 export const vendorCarListService = async (
     vendorId: bigint
 ): Promise<CarResponse[]> => {
@@ -91,7 +89,6 @@ export const vendorCarListService = async (
     }))
 
 }
-
 export const vendorGetAllBookingService = async (
     vendorId: bigint
 ): Promise<BookingResponse[]> => {
@@ -141,14 +138,14 @@ export const vendorRevenueService = async (
     vendorId: bigint,
     startDate: Date,
     endDate: Date
-):Promise<VendorRevenueResponse> => {
+): Promise<VendorRevenueResponse> => {
     if (!vendorId) {
         throw new AppError("Vendor id is required", 400);
     }
     const bookings = await prisma.booking.findMany({
         where: {
             status: {
-                in: ["confirmed", "active", "completed","pending"],
+                in: ["confirmed", "active", "completed", "pending"],
             },
             car: {
                 vendor_id: vendorId,
@@ -185,7 +182,7 @@ export const vendorRevenueService = async (
         totalPlatformRevenue += platformCommission;
     }
     return {
-        currency:env.CURRENCY,
+        currency: env.CURRENCY,
         vendorRevenue: totalVendorRevenue,
         platformRevenue: totalPlatformRevenue,
     };

@@ -1,11 +1,11 @@
-import express from 'express';
+import {Router} from 'express';
 import { requireAuth } from '../../middleware/auth.middleware.js';
 import { vendorAuth } from '../../middleware/vendor.middleware.js';
 import  * as VendorController from './vendor.controller.js';
 import { createLimiter } from '../../middleware/ratelimit.middleware.js';
 import { vendorInputValidation } from './vendor.validator.js';
 
-const vendorRouter = express.Router();
+const vendorRouter = Router();
 
 vendorRouter.post(
     '/onboard',

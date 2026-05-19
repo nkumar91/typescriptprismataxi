@@ -4,6 +4,7 @@ import userRouter from "../modules/user/user.router.js";
 import carRouter from "../modules/car/car.router.js";
 import bookingsRouter from "../modules/booking/booking.router.js";
 import vendorRouter from "../modules/vendor/vendor.router.js";
+import priceRouter from "../modules/pricing/price.router.js";
 const allRoutes = express.Router();
 
 allRoutes.use("/auth",authRouter);
@@ -11,5 +12,6 @@ allRoutes.use("/user",userRouter);
 allRoutes.use("/cars", carRouter);
 allRoutes.use("/bookings",bookingsRouter);
 allRoutes.use("/vendor",vendorRouter);
+allRoutes.use("/pricing",priceRouter);
 
 export default allRoutes;

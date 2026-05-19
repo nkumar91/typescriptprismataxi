@@ -1,4 +1,4 @@
-import express from 'express';
+import {Router} from 'express';
 import { requireAuth } from '../../middleware/auth.middleware.js';
 import { createLimiter } from '../../middleware/ratelimit.middleware.js';
 import * as BookingController from './booking.controller.js';
@@ -9,7 +9,7 @@ import {
     paramsWithDateValidation,
 } from './booking.validator.js';
 
-const bookingsRouter = express.Router();
+const bookingsRouter = Router();
 
 
 bookingsRouter.use(requireAuth);

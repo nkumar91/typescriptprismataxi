@@ -66,7 +66,6 @@ export const vendorProfileController = async (
     }
 };
 
-
 export const vendorCarController = async (
     req: RequestWithVendor,
     res: Response,
@@ -88,7 +87,6 @@ export const vendorCarController = async (
         next(err);
     }
 };
-
 
 export const vendorBookingController = async (
     req: RequestWithVendor,

@@ -27,8 +27,10 @@ export const uploadToCloudinary = (
       .end(fileBuffer);
   });
 };
-
-export const handleHttpRequestInput = async (req: Request, res: Response) => {
+export const handleHttpRequestInput = async (
+  req: Request, 
+  res: Response
+) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const errorMessages = errors.array().map(err => err.msg);
@@ -38,7 +40,6 @@ export const handleHttpRequestInput = async (req: Request, res: Response) => {
     });
   }
 }
-
 export const generateBookingNumber = () => {
   const prefix = "BK";
   // Current timestamp (last 6 digits)
@@ -47,8 +48,6 @@ export const generateBookingNumber = () => {
   const random = Math.floor(1000 + Math.random() * 9000);
   return `${prefix}-${timestamp}-${random}`;
 };
-
-
 export const calculateTotalDays = (
   start_date: Date,
   end_date: Date
@@ -59,8 +58,6 @@ export const calculateTotalDays = (
   );
   return totalDays;
 }
-
-
 export const uploadToS3 = async (
   fileBuffer: Buffer,
   fileName: string,

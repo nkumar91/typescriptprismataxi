@@ -18,6 +18,7 @@ model Coupon {
   is_active          Boolean    @default(true)
   created_at         DateTime?  @default(now())
   updated_at         DateTime?  @updatedAt
+  coupon_usages      CouponUsage[]
 
   @@index([valid_from])
   @@index([valid_until])

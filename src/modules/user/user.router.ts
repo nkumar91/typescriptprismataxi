@@ -1,9 +1,9 @@
-import express from "express";
+import {Router} from "express";
 import * as userController from "./user.controller.js";
 import { createLimiter } from "../../middleware/ratelimit.middleware.js";
 import { requireAuth } from "../../middleware/auth.middleware.js";
 import { cloud } from "./user.middleware.js";
-const userRouter = express.Router();
+const userRouter = Router();
 
 userRouter.use(requireAuth);
 
