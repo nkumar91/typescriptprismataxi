@@ -7,6 +7,7 @@ export type ApiResponse<T = unknown> = {
   access_token?: null | string;
   refresh_token?: null | string;
   data?: T;
+  pagination?:object |null;
 };
 
 export interface TokenPayload {

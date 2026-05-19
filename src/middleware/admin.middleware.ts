@@ -46,7 +46,7 @@ export const requireAdminAuth = async (
     }
 
     catch (error) {
-        console.error('Admin auth middleware error', error);
+        // console.error('Admin auth middleware error', error);
         next(error)
     }
 };

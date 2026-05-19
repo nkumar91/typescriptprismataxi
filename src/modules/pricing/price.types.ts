@@ -20,7 +20,7 @@ export type Coupon = {
 };
 
 export type CouponUsage = {
-    id: bigint;
+    id?: bigint;
     coupon_id: bigint;
     user_id: bigint;
     booking_id: bigint;
@@ -28,8 +28,28 @@ export type CouponUsage = {
     created_at?: Date | string | null;
 };
 
+export type CouponApply = {
+    coupon_id?: bigint;
+    code: string;
+    booking_amount:number;
+};
+
 export type CouponResponse = Coupon & {
     coupon_usages?: CouponUsage[];
 };
 
+export type ParamsType = {
+    id?:bigint
+}
+
 export type CouponUsageResponse = CouponUsage;
+
+export type ApplyCouponResponse = {
+    coupon_id?:bigint;
+    code:string;
+    type:string;
+    value:Prisma.Decimal;
+    discount_amount:Prisma.Decimal | null;
+    booking_amount:Prisma.Decimal | null;
+    final_amount:Prisma.Decimal | null;
+}
