@@ -23,6 +23,7 @@ const envSchema = z.object({
   GST_PER:z.string().default("18"),
   SURGE_PER:z.string().default("0.20"),
   PLATFORM_FEE:z.string().default("20"),
+  CURRENCY:z.string().default("INR")
 });
 
 export const env = envSchema.parse(process.env);

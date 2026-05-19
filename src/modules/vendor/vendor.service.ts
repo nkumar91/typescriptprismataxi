@@ -9,7 +9,8 @@ import {
     CarFeatures,
     CarResponse,
     createVendorInput,
-    VendorResponse
+    VendorResponse,
+    VendorRevenueResponse
 } from "./vendor.types.js";
 
 export const createNewVendorService = async (
@@ -64,7 +65,6 @@ export const getProfileAvaialable = async (
     }
 }
 
-
 export const vendorCarListService = async (
     vendorId: bigint
 ): Promise<CarResponse[]> => {
@@ -92,10 +92,9 @@ export const vendorCarListService = async (
 
 }
 
-
 export const vendorGetAllBookingService = async (
     vendorId: bigint
-):Promise<BookingResponse[]> => {
+): Promise<BookingResponse[]> => {
     if (!vendorId) {
         throw new AppError("Vendor id is required", 400);
     }
@@ -126,17 +125,68 @@ export const vendorGetAllBookingService = async (
             created_at: "desc",
         },
     });
-     if (!bookings) {
+    if (!bookings) {
         throw new AppError("Booking Details not found", 404);
     }
     return bookings.map((booking) => ({
         ...booking,
-
         car: {
             ...booking.car,
-
             features:
                 booking.car.features as CarFeatures,
         },
     }));
+}
+export const vendorRevenueService = async (
+    vendorId: bigint,
+    startDate: Date,
+    endDate: Date
+):Promise<VendorRevenueResponse> => {
+    if (!vendorId) {
+        throw new AppError("Vendor id is required", 400);
+    }
+    const bookings = await prisma.booking.findMany({
+        where: {
+            status: {
+                in: ["confirmed", "active", "completed","pending"],
+            },
+            car: {
+                vendor_id: vendorId,
+            },
+            // created_at: {
+            //     gte: startDate,
+            //     lte: endDate,
+            // },
+        },
+        select: {
+            total_amount: true,
+            car: {
+                select: {
+                    vendor: {
+                        select: {
+                            commission_rate: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+    let totalVendorRevenue = 0;
+    let totalPlatformRevenue = 0;
+    for (const booking of bookings) {
+        const totalAmount = Number(booking.total_amount);
+        const commissionRate = Number(
+            booking.car.vendor.commission_rate
+        );
+        const platformCommission = (totalAmount * commissionRate) / 100;
+        const vendorRevenue =
+            totalAmount - platformCommission;
+        totalVendorRevenue += vendorRevenue;
+        totalPlatformRevenue += platformCommission;
+    }
+    return {
+        currency:env.CURRENCY,
+        vendorRevenue: totalVendorRevenue,
+        platformRevenue: totalPlatformRevenue,
+    };
 }

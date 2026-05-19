@@ -119,3 +119,13 @@ export type BookingResponse = {
     user_deatils?:UserDetails[]
 
 };
+
+
+export type VendorRevenueResponse = {
+    currency?:string;
+    grossRevenue?: number;
+    platformCommission?: number;
+    vendorRevenue?: number;
+    totalBookings?: number;
+    platformRevenue?:number;
+};
