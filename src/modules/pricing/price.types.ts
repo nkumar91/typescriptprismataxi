@@ -53,3 +53,20 @@ export type ApplyCouponResponse = {
     booking_amount:Prisma.Decimal | null;
     final_amount:Prisma.Decimal | null;
 }
+
+export type PriceRequest = {
+    car_id: bigint;
+    start_date: Date | string;
+    end_date: Date | string;
+    coupon_code?: string | null;
+};
+
+export type CalculatePricing = {
+        total_days: number,
+        base_amount: Prisma.Decimal,
+        surge_amount: Prisma.Decimal,
+        tax_amount: Prisma.Decimal,
+        security_deposit:Prisma.Decimal,
+        discount_amount:Prisma.Decimal,
+        total_amount:Prisma.Decimal,
+}

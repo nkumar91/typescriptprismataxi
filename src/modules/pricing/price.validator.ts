@@ -32,3 +32,15 @@ export const pageQueryValidation: ValidationChain[] = [
 	query("page").optional().exists().isInt({min:1}).withMessage("Page must be an integer"),
 	query("limit").optional().exists().isInt({min:50}).withMessage("Limit must be an integer"),
 ];
+
+export const priceRequestValidation: ValidationChain[] = [
+	body("car_id").exists().isInt().withMessage("car_id must be an integer"),
+	body("start_date").exists().isISO8601().withMessage("start_date must be a valid ISO8601 date"),
+	body("end_date").exists().isISO8601().withMessage("end_date must be a valid ISO8601 date").custom((end, { req }) => {
+		const start = req.body.start_date;
+		if (!start) return false;
+		return new Date(end) > new Date(start);
+	}).withMessage("end_date must be after start_date"),
+	body("coupon_code").optional({ nullable: true }).isString().isLength({ max: 50 }).withMessage("coupon_code must be a string up to 50 chars"),
+];
+

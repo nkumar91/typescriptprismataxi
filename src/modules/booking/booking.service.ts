@@ -61,6 +61,8 @@ export const createNewBookingService = async (
     const _bookingCar = await prisma.booking.create({
         data: bookingData
     })
+
+    
     return {
         ..._bookingCar
     };

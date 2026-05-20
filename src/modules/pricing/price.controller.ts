@@ -1,8 +1,8 @@
 import { NextFunction, Response } from "express";
 import { RequestWithAdmin } from "../../middleware/admin.middleware.js";
 import { validationResult } from "express-validator";
-import { ApplyCouponResponse, Coupon, CouponApply, CouponResponse, CouponUsage, ParamsType } from "./price.types.js";
-import { addCouponService, applyCouponService, deleteCouponService, getAllCouponsService } from "./price.service.js";
+import { ApplyCouponResponse, CalculatePricing, Coupon, CouponApply, CouponResponse, CouponUsage, ParamsType, PriceRequest } from "./price.types.js";
+import { addCouponService, applyCouponService, calculatePriceService, deleteCouponService, getAllCouponsService } from "./price.service.js";
 import { ApiResponse } from "../../utils/types.js";
 import { env } from "../../config/env.js";
 import { AppError } from "../../utils/error.js";
@@ -117,5 +117,36 @@ export const applyCouponController = async (
     }
     catch (err) {
         next(err);
+    }
+}
+
+
+//calculate price
+export const calculatePriceController = async(
+    req:RequestWithUser,
+    res:Response,
+    next:NextFunction
+)=>{
+    try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorMessages = errors.array().map(err => err.msg);
+            return res.status(400).json({
+                status: "failed",
+                message: errorMessages
+            });
+        }
+      //  const {userId} = req.user!;
+        const  inputData:PriceRequest = req.body!;
+        const calculateData = await calculatePriceService(inputData);
+        const responseData:ApiResponse<CalculatePricing> = {
+            status:"success",
+            message:"amount calculated",
+            data:calculateData
+        }
+        return res.status(201).json(responseData);
+    }
+    catch(err){
+        next(err)
     }
 }

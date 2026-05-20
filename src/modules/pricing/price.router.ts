@@ -1,7 +1,7 @@
 import {Router}  from "express";
 import { requireAdminAuth } from "../../middleware/admin.middleware.js";
 import { createLimiter } from "../../middleware/ratelimit.middleware.js";
-import { couponIdParamValidation, couponInputValidation, couponUsageInputValidation, pageQueryValidation } from "./price.validator.js";
+import { couponIdParamValidation, couponInputValidation, couponUsageInputValidation, pageQueryValidation, priceRequestValidation } from "./price.validator.js";
 import * as CouponController from "./price.controller.js";
 import { requireAuth } from "../../middleware/auth.middleware.js";
 const priceRouter = Router();
@@ -41,5 +41,16 @@ priceRouter.post(
     couponUsageInputValidation,
     CouponController.applyCouponController
 );
+
+//calculate price
+priceRouter.post(
+    "/calculate",
+    createLimiter(1,60),
+    priceRequestValidation,
+    requireAuth,
+    CouponController.calculatePriceController
+)
+
+
 
 export default priceRouter;
