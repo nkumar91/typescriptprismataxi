@@ -6,6 +6,7 @@ import bookingsRouter from "../modules/booking/booking.router.js";
 import vendorRouter from "../modules/vendor/vendor.router.js";
 import priceRouter from "../modules/pricing/price.router.js";
 import citiesRouter from "../modules/cities/cities.router.js";
+import adminRouter from "../modules/admin/admin.router.js";
 const allRoutes = express.Router();
 
 allRoutes.use("/auth",authRouter);
@@ -15,5 +16,6 @@ allRoutes.use("/bookings",bookingsRouter);
 allRoutes.use("/vendor",vendorRouter);
 allRoutes.use("/pricing",priceRouter);
 allRoutes.use("/cities",citiesRouter);
+allRoutes.use("/admin",adminRouter);
 
 export default allRoutes;
