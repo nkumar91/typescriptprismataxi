@@ -25,14 +25,54 @@ export const createLocationService = async (
 ):Promise<LocationResponse> => {
     const city = await prisma.city.findUnique({
         where: {
-            id: locationInput.city_id
+            id: cityId
         }
     });
     if (!city) {
         throw new AppError("City Does not  exists", 400)
     }
     locationInput.city_id = cityId;
+    locationInput.created_at = new Date();
+    locationInput.updated_at = new Date();
     return await prisma.location.create({
         data: {...locationInput},
     });
+}
+
+
+export const getAllCitieService = async (
+    page: number,
+    limit: number
+):Promise<CityResponse[]> => {
+    //  if (!page) {
+    //     page = 1;
+    // }
+    // if (!limit) {
+    //     limit = 50;
+    // }
+    // const skip = (page - 1) * limit;
+    const city = await prisma.city.findMany();
+    if (!city) {
+        throw new AppError("City not found", 404)
+    }
+    return city
+}
+
+
+
+export const getLocationService = async(
+    cityId:bigint
+)=>{
+        if(!cityId){
+            throw new AppError("City ID is required", 400);
+        }
+        const location = await prisma.location.findMany({
+            where:{
+                city_id:cityId
+            }
+        });
+        if(!location){
+            throw new AppError("Location not found for the given city ID", 404);
+        }
+        return location;
 }

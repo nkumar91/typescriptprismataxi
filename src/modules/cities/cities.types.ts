@@ -49,6 +49,8 @@ export type CreateLocationInput = {
     lat?: Prisma.Decimal;
     lng?: Prisma.Decimal;
     is_active?: boolean;
+    created_at?: Date | string | null;
+    updated_at?: Date | string | null;
 };
 
 export type UpdateLocationInput = {

@@ -4,7 +4,7 @@ export const createCityValidation: ValidationChain[] = [
     body("name")
         .exists()
         .isString()
-        .isLength({ max: 100 })
+        .isLength({min:3, max: 100 })
         .withMessage("name must be a string up to 100 chars"),
     body("state")
         .exists()

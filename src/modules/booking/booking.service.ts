@@ -58,11 +58,45 @@ export const createNewBookingService = async (
     const total_amount = sub_total.plus(tax_amount);
     bookingData.total_amount = total_amount
 
+    if (bookingData.coupon_id) {
+        const couponDetails = await prisma.coupon.findFirst({
+            where: {
+                id: bookingData.coupon_id,
+                is_active: true,
+            }
+        })
+        if (!couponDetails) {
+            throw new AppError("Invalid Coupon Code", 400);
+        }
+        if (couponDetails.valid_until < new Date()) {
+            throw new AppError("Coupon Code has expired", 400);
+        }
+        if (couponDetails.type === "percentage") {
+            const discount_amount = total_amount.mul(couponDetails.value).div(100);
+            bookingData.discount_amount = discount_amount;
+            bookingData.total_amount = total_amount.minus(discount_amount);
+        } else if (couponDetails.type === "flat") {
+            const discount_amount = new Prisma.Decimal(couponDetails.value);
+            bookingData.discount_amount = discount_amount;
+            bookingData.total_amount = total_amount.minus(discount_amount);
+        }
+    }
+
+
     const _bookingCar = await prisma.booking.create({
         data: bookingData
     })
-
-    
+    if (bookingData.coupon_id) {
+        const couponUsageData = {
+            user_id: user_id,
+            coupon_id: bookingData.coupon_id!,
+            booking_id: _bookingCar.id,
+            discount_applied: bookingData.discount_amount || new Prisma.Decimal(0),
+        }
+        await prisma.couponUsage.create({
+            data: couponUsageData
+        });
+    }
     return {
         ..._bookingCar
     };
@@ -71,8 +105,7 @@ export const createNewBookingService = async (
 
 export const getBookingDetailsService = async (
     bookingId: bigint
-): Promise<BookingResponse> => 
-    {
+): Promise<BookingResponse> => {
     const bookingData = await prisma.booking.findUnique({
         where: {
             id: bookingId

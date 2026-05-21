@@ -5,16 +5,23 @@ import { cityIdParamValidation, createCityValidation, createLocationValidation }
 import * as CityController   from "./cities.controller.js";
 import { createLimiter } from "../../middleware/ratelimit.middleware.js";
 const citiesRouter = Router();
+
+// Get all cities
 citiesRouter.get(
     "/",
     createLimiter(1,120),
-    requireAuth
+    requireAuth,
+    CityController.getCitiesController
 );
+// Get all locations in a city
 citiesRouter.get(
     "/:id/locations",
     createLimiter(1,120),
-    requireAuth
+    cityIdParamValidation,
+    requireAuth,
+    CityController.getLocationController
 );
+// Create a new city
 citiesRouter.post(
     "/",
     createLimiter(1,10),
@@ -22,6 +29,7 @@ citiesRouter.post(
     createCityValidation,
     CityController.createCityController
 );
+// Create a new location in a city
 citiesRouter.post(
     "/:id/locations",
     createLimiter(1,10),

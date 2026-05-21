@@ -2,8 +2,9 @@ import { NextFunction, Response } from "express";
 import { RequestWithAdmin } from "../../middleware/admin.middleware.js";
 import { validationResult } from "express-validator";
 import { CityParams, CityResponse, CreateCityInput, CreateLocationInput, LocationResponse } from "./cities.types.js";
-import { createCityService, createLocationService } from "./cities.service.js";
+import { createCityService, createLocationService, getAllCitieService, getLocationService } from "./cities.service.js";
 import { ApiResponse } from "../../utils/types.js";
+import { RequestWithUser } from "../../middleware/auth.middleware.js";
 
 export const createCityController = async (
     req: RequestWithAdmin,
@@ -59,6 +60,48 @@ export const createLocationController = async (
         return res.status(201).json(responseData);
     }
     catch (err) {
+        next(err);
+    }
+}
+
+
+export const getCitiesController = async(
+    req:RequestWithUser,
+    res:Response,
+    next:NextFunction
+)=>{
+    try{
+          let { page, limit } = req.query!;
+        const allCities = await getAllCitieService(Number(page), Number(limit));
+        const responseData:ApiResponse<CityResponse[]> =  {
+            status:"success",
+            message:"all cities",
+            data:allCities
+        }
+        return res.status(200).json(responseData);
+    }
+    catch(err){
+        next(err);
+    }
+}
+
+
+export const getLocationController = async(
+    req:RequestWithUser,
+    res:Response,
+    next:NextFunction
+)=>{
+    try{
+        const city:CityParams = req.params;
+        const location = await getLocationService(city.id!);
+        const responseData:ApiResponse<LocationResponse[]> =  {
+            status:"success",
+            message:"all cities",
+            data:location
+        }
+        return res.status(200).json(responseData);
+    }
+    catch(err){
         next(err);
     }
 }
