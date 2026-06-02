@@ -5,6 +5,7 @@ export type UserStatus = "active" | "suspended" | "pending";
 export type KYCStatus = "pending" | "approved" | "rejected" | "not_submitted";
 
 export type GetProfileResponse = {
+
   uuid: string;
   name: string;
   email: string;

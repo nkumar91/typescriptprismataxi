@@ -54,9 +54,9 @@ export const loginUser = async (data: LoginInput) => {
   if (!user || !user.password) {
     throw new AppError("Invalid email or account has been deleted", 401);
   }
-  if(user.status !== "active") {
-    throw new AppError("User account is not active verification required", 403);
-  }
+  // if(user.status !== "active") {
+  //   throw new AppError("User account is not active verification required", 403);
+  // }
   const isValidPassword = await bcrypt.compare(data.password, user.password);
   if (!isValidPassword) {
     throw new AppError("Invalid password", 401);
@@ -70,7 +70,13 @@ export const loginUser = async (data: LoginInput) => {
     email: user.email,
     type: "user_auth",
   });
-  return { user, token };
+  const access_token = signJwt({
+    userId: user.id,
+    uuid: user.uuid,
+    email: user.email,
+    type: "access_token",
+  },"30m");
+  return { user, token, access_token };
 };
 
 

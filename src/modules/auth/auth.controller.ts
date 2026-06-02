@@ -11,10 +11,11 @@ import {
   resetPassword
 } from "./auth.service.js";
 import { validationResult } from "express-validator";
-import { verifyJwt } from "../../utils/jwt.js";
+import { signJwt, verifyJwt } from "../../utils/jwt.js";
 import jwt from "jsonwebtoken";
 import redisClient from "../../config/redis.js";
 import { RequestWithUser } from "../../middleware/auth.middleware.js";
+import { env } from "../../config/env.js";
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -89,14 +90,15 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       });
     }
 
-    const { user, token } = result;
+    const { user, token,access_token } = result;
     const { password: _password, remember_token: _rememberToken, ...userResponse } = user;
 
     const responseData: ApiResponse<UserResponse> = {
       status: "success",
       message: "Login successfully",
       data: userResponse,
-      access_token: token
+      refresh_token: token,
+      access_token: access_token
     };
 
     return res.status(200).json(responseData);
@@ -232,3 +234,39 @@ export const resetUserPassword = async (req: RequestWithUser, res: Response, nex
     next(error);
   } 
 };
+
+
+export const refreshToken = async (
+  req: Request, 
+  res: Response, 
+  next: NextFunction) => {
+  try {
+    const { token } = req.body;
+    if (!token || typeof token !== "string") {
+      return res.status(400).json({
+        status: "failed",
+        message: "Refresh token is required"
+      });
+    }
+    const decoded: any = verifyJwt(token);
+    if (!decoded || decoded.type !== "user_auth") {
+      return res.status(401).json({
+        status: "failed",
+        message: "Invalid or expired refresh token"
+      });
+    }
+    const newAccessToken = signJwt({
+        userId: decoded.userId,
+        uuid: decoded.uuid,
+        email: decoded.email,
+        type: "access_token",
+      },"30m");
+    return res.status(200).json({
+      status: "success",
+      message: "Token refreshed successfully",
+      access_token: newAccessToken
+     });
+  } catch (error) {    
+    next(error);
+  }
+  }

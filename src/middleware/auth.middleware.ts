@@ -32,6 +32,12 @@ export const requireAuth = async (req: RequestWithUser, res: Response, next: Nex
                 message: 'Invalid or expired token' 
             });
         }
+        if(decoded.type !== 'access_token') {
+            return res.status(401).json({ 
+                status: 'failed',
+                message: 'Invalid token type'
+             });
+        }
         req.user = decoded;
         next();
     } catch (err) {

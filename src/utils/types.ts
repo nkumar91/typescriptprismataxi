@@ -8,6 +8,8 @@ export type ApiResponse<T = unknown> = {
   refresh_token?: null | string;
   data?: T;
   pagination?:object |null;
+  total_users?:number | null;
+  total_items?:number | null
 };
 
 export interface TokenPayload {

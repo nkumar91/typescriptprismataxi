@@ -36,4 +36,10 @@ authRouter.post(
     authController.verifyEmailController
 );
 
+authRouter.post(
+    "/refresh-token", 
+    createLimiter(1, 10), // Limit to 10 requests per 1 minute for token refresh
+    authController.refreshToken
+);
+
 export default authRouter;
